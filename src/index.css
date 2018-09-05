@@ -19,3 +19,8 @@ body {
 .green-top-border {
  border-top: 3px solid rgb(106, 149,102);
 }
+
+.black-background {
+  background: #3D3D3B;
+  color: white;
+}

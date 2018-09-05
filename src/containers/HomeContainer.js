@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Navbar from '../components/Navbar/Navbar'
 import TodayEvent from '../components/TodayEvent/TodayEvent'
 import EventList from '../components/EventList/EventList'
+import Footer from '../components/Footer/Footer'
 import { 
   Divider,
   ControlGroup,
@@ -17,9 +18,7 @@ export default class HomeContainer extends Component {
   render() {
     return (
       <React.Fragment>
-        <div>
-          <Navbar />
-        </div>
+        <Navbar />
         <section>
           <div className="container-fluid p-5">
             <h2>Eventos para hoy <small className="text-muted">{this.now.toLocaleDateString()}</small></h2> <a href="">Ver mas</a>
@@ -32,7 +31,7 @@ export default class HomeContainer extends Component {
             </div>
           </div>
         </section>
-        <section className="soft-gray-background green-top-border py-3">
+        <section className="soft-gray-background green-top-border pt-3 pb-5">
           <div className="container">
             <h2>Busca mas eventos</h2>
             <Divider />
@@ -48,6 +47,7 @@ export default class HomeContainer extends Component {
             </div>
           </div>
         </section>
+        <Footer />
       </React.Fragment>
     )
   }
