@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 import {
   Alignment,
   Button,
@@ -8,7 +9,8 @@ import {
   NavbarDivider,
   NavbarGroup,
   NavbarHeading
-} from "@blueprintjs/core";
+} from "@blueprintjs/core"
+import Logo from '../../assets/cusurlogo.jpg'
 
 const propTypes = {
   userName: PropTypes.string,
@@ -16,7 +18,9 @@ const propTypes = {
 }
 
 function NavbarComponent(props) {
-  let navbarBody = <Button className={Classes.MINIMAL} icon="log-in" text="Entrar" />
+  let navbarBody = (
+    <Button className={Classes.MINIMAL} icon="log-in" text="Entrar" onClick={() => { props.history.push('/login') }}/>
+  )
   
   if (props.isLoggedIn) {
     navbarBody = (
@@ -32,6 +36,9 @@ function NavbarComponent(props) {
   return (
     <React.Fragment>
       <Navbar>
+        <NavbarGroup align={Alignment.LEFT}>
+          <img src={Logo} alt="Centro Universitario del Sur" width="45" height="45" />
+        </NavbarGroup>
         <NavbarGroup align={Alignment.RIGHT}>
           {navbarBody}
         </NavbarGroup>
@@ -44,9 +51,9 @@ NavbarComponent.propTypes = propTypes
 
 NavbarComponent.defaultProps = {
   userName: 'Testing',
-  isLoggedIn: true
+  isLoggedIn: false
 }
 
 
 
-export default NavbarComponent
+export default withRouter(NavbarComponent)

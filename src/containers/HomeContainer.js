@@ -4,9 +4,14 @@ import Navbar from '../components/Navbar/Navbar'
 export default class HomeContainer extends Component {
   render() {
     return (
-      <div>
-        <Navbar />
-      </div>
+      <React.Fragment>
+        <div>
+          <Navbar />
+        </div>
+        <div className="container">
+          <h1>hi</h1>
+        </div>
+      </React.Fragment>
     )
   }
 }
