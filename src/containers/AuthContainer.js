@@ -14,6 +14,7 @@ export default class AuthContainer extends Component {
   handleLogin = (e) => {
     e.preventDefault();
     console.log('submitted')
+    this.props.history.push('/')
   }
 
   render() {

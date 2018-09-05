@@ -20,6 +20,10 @@ body {
  border-top: 3px solid rgb(106, 149,102);
 }
 
+.border-green {
+  border: 5px solid rgb(106, 149,102);
+}
+
 .black-background {
   background: #3D3D3B;
   color: white;

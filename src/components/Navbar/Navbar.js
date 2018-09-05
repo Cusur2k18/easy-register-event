@@ -28,7 +28,7 @@ function NavbarComponent(props) {
         <NavbarHeading>{props.userName}</NavbarHeading>
         <NavbarDivider />
         <Button className={Classes.MINIMAL} icon="user" text="Mi perfil" />
-        <Button className={Classes.MINIMAL} icon="log-out" text="Salir" />
+        <Button className={Classes.MINIMAL} icon="log-out" text="Salir" onClick={() => { props.history.push('/login') }} />
       </React.Fragment>
     )
   }
