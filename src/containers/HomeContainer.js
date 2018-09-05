@@ -12,8 +12,12 @@ import {
 
 export default class HomeContainer extends Component {
 
-  FILTER_OPTIONS = ["Nombre", "Carrera"];
+  FILTER_OPTIONS = ['Buscar por Nombre', 'Buscar por Carrera'];
   now = new Date()
+
+  onEventDetailHandler = () => {
+    this.props.history.push('event/3abe0fae-a0a7-4f92-95f1-ac3a03384a28')
+  }
 
   render() {
     return (
@@ -23,17 +27,17 @@ export default class HomeContainer extends Component {
           <div className="container-fluid p-5">
             <h2>Eventos para hoy <small className="text-muted">{this.now.toLocaleDateString()}</small></h2> <a href="">Ver mas</a>
             <Divider />
-            <div className="row justify-content-around">
-              <TodayEvent />
-              <TodayEvent />
-              <TodayEvent />
-              <TodayEvent />
+            <div className="row justify-content-around px-5">
+              <TodayEvent onEventDetail={this.onEventDetailHandler}/>
+              <TodayEvent onEventDetail={this.onEventDetailHandler}/>
+              <TodayEvent onEventDetail={this.onEventDetailHandler}/>
+              <TodayEvent onEventDetail={this.onEventDetailHandler}/>
             </div>
           </div>
         </section>
         <section className="soft-gray-background green-top-border pt-3 pb-5">
           <div className="container">
-            <h2>Busca mas eventos</h2>
+            <h2>Buscar eventos</h2>
             <Divider />
             <div className="col-12 d-flex pt-3">
               <ControlGroup vertical={false}>
@@ -43,7 +47,8 @@ export default class HomeContainer extends Component {
               </ControlGroup>
             </div>
             <div className="row d-flex justify-content-around">
-              <EventList />
+              <EventList 
+                onEventDetail={this.onEventDetailHandler}/>
             </div>
           </div>
         </section>

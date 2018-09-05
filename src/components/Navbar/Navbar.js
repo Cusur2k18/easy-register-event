@@ -37,7 +37,9 @@ function NavbarComponent(props) {
     <React.Fragment>
       <Navbar>
         <NavbarGroup align={Alignment.LEFT}>
-          <img src={Logo} alt="Centro Universitario del Sur" width="45" height="45" />
+          <div className="clickable" onClick={() => { props.history.push('/') }}>
+            <img src={Logo} alt="Centro Universitario del Sur" width="45" height="45"/>
+          </div>
         </NavbarGroup>
         <NavbarGroup align={Alignment.RIGHT}>
           {navbarBody}
@@ -51,7 +53,7 @@ NavbarComponent.propTypes = propTypes
 
 NavbarComponent.defaultProps = {
   userName: 'Testing',
-  isLoggedIn: false
+  isLoggedIn: true
 }
 
 
