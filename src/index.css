@@ -7,3 +7,15 @@ body {
 #root {
   height: 100%;;
 }
+
+.clickable:hover {
+  cursor: pointer;
+}
+
+.soft-gray-background { 
+  background: #F2F2F2;
+}
+
+.green-top-border {
+ border-top: 3px solid rgb(106, 149,102);
+}
