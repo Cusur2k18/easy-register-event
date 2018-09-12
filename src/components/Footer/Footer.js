@@ -7,7 +7,7 @@ const propTypes = {
 
 function Footer(props) {
   return (
-    <div className="justify-content-between black-background p-5">
+    <div className="justify-content-center justify-content-md-between text-center black-background p-5 footer">
       Centro Universitario del Sur
     </div>
   )

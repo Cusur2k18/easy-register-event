@@ -12,7 +12,7 @@ function Ticket(props) {
   return (
     <div id="ticket" className="col-12 col-md-7 pt-4 px-4 pb-2">
       <div className="row">
-        <div className="col-12 col-md-3">
+        <div className="col-12 col-md-3 text-center">
           <QRCode value="asdfasdfasdfasdfasdsdfasdfasdfasdfasfsad" />
         </div>
         <div className="col-12 col-md-8">

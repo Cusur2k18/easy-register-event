@@ -24,7 +24,7 @@ export default class HomeContainer extends Component {
       <React.Fragment>
         <Navbar />
         <section>
-          <div className="container-fluid p-5">
+          <div className="container-fluid p-3 p-md-5">
             <h2>Eventos para hoy <small className="text-muted">{this.now.toLocaleDateString()}</small></h2> <a href="">Ver mas</a>
             <Divider />
             <div className="row justify-content-around px-5">

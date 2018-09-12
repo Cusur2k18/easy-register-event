@@ -2,13 +2,26 @@ import React, { Component } from 'react'
 import Navbar from '../components/Navbar/Navbar'
 import Footer from '../components/Footer/Footer'
 import Ticket from '../components/Ticket/Ticket'
-import { Button, Card, Elevation, Divider, Callout } from "@blueprintjs/core";
+import { 
+  Button,
+  Card,
+  Elevation,
+  Divider,
+  Callout,
+  Position,
+  Tooltip
+} from "@blueprintjs/core";
 import html2canvas from 'html2canvas';
 import * as jsPDF from 'jspdf'
 
 export default class EventDetailContainer extends Component {
 
+  state = {
+    downloadLoading: false
+  }
+
   printQRCode = () => {
+    this.setState({ downloadLoading: true })
     const input = document.getElementById('ticket')
     html2canvas(input)
       .then((canvas) => {
@@ -16,6 +29,7 @@ export default class EventDetailContainer extends Component {
         const pdf = new jsPDF('l', 'mm', [200, 70]);
         pdf.addImage(imgData, 'JPEG', 25, 10, 150, 50);
         pdf.save("download.pdf");
+        this.setState({ downloadLoading: false })
       })
   }
 
@@ -38,28 +52,19 @@ export default class EventDetailContainer extends Component {
                       <blockquote className="bp3-blockquote">
                         <span className="font-weight-bold">DATOS DEL EVENTO:</span>
                       </blockquote>
-                      <ul className="list-group list-group-flush mt-5">
+                      <ul className="list-group list-group-flush mt-3 mt-md-5">
                         <li className="list-group-item">Cras justo odio</li>
                         <li className="list-group-item">Dapibus ac facilisis in</li>
                         <li className="list-group-item">Morbi leo risus</li>
                         <li className="list-group-item">Porta ac consectetur ac</li>
                         <li className="list-group-item">Vestibulum at eros</li>
-                        <li className="list-group-item">Morbi leo risus</li>
-                        <li className="list-group-item">Porta ac consectetur ac</li>
-                        <li className="list-group-item">Vestibulum at eros</li>
-                        <li className="list-group-item">Morbi leo risus</li>
-                        <li className="list-group-item">Porta ac consectetur ac</li>
-                        <li className="list-group-item">Vestibulum at eros</li>
-                        <li className="list-group-item">Morbi leo risus</li>
-                        <li className="list-group-item">Morbi leo risus</li>
-                        <li className="list-group-item">Morbi leo risus</li>
                       </ul>
                     </div>
                     <div className="col-12 col-md-4 pt-3">
                       <blockquote className="bp3-blockquote">
                         <span className="font-weight-bold">HORARIOS:</span>
                       </blockquote>
-                      <Callout title="Visually important content" className="mt-5">
+                      <Callout title="Visually important content" className="mt-3 mt-md-5">
                         The component is a simple wrapper around the CSS API that provides props for modifiers and optional
                         title element. Any additional HTML props will be spread to the rendered
                         element.
@@ -68,16 +73,19 @@ export default class EventDetailContainer extends Component {
                     <div className="col-12 mt-3 pl-3 pt-3 green-top-border">
                       <blockquote className="bp3-blockquote mb-4">
                         <span className="font-weight-bold">TU BOLETO:</span>
+                          <Tooltip content="Descarga tu boleto" position={Position.TOP} hoverCloseDelay={100} className="float-right">
+                            <Button icon="download" className="bp3-intent-primary" loading={this.state.downloadLoading} onClick={this.printQRCode}/>
+                          </Tooltip>
                       </blockquote>
                       <div className="d-flex justify-content-center">
                         <Ticket />
                       </div>
                     </div>
                   </div>
-                  <div className="row justify-content-around green-top-border pt-3 mt-5">
-                    <Button icon="follower" text="Registrarme al evento" className="bp3-intent-primary"/>
-                    <Button icon="print" text="Imprimir constancia" className="bp3-intent-success" onClick={this.printQRCode}/>
-                    <Button icon="trash" text="Borrar mi registro" className="bp3-intent-danger"/>
+                  <div className="row flex-column flex-sm-row justify-content-between justify-content-md-around green-top-border px-3 px-md-0 pt-3 mt-5">
+                    <Button icon="follower" text="Registrarme al evento" className="bp3-intent-primary mt-3 mt-md-0"/>
+                    <Button icon="print" text="Imprimir constancia" className="bp3-intent-success mt-3 mt-md-0" />
+                    <Button icon="trash" text="Borrar mi registro" className="bp3-intent-danger mt-3 mt-md-0"/>
                   </div>
                 </Card>
               </div>
