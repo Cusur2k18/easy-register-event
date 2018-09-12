@@ -13,8 +13,8 @@ export default class EventDetailContainer extends Component {
     html2canvas(input)
       .then((canvas) => {
         const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF();
-        pdf.addImage(imgData, 'JPEG', 0, 0);
+        const pdf = new jsPDF('l', 'mm', [200, 70]);
+        pdf.addImage(imgData, 'JPEG', 25, 10, 150, 50);
         pdf.save("download.pdf");
       })
   }

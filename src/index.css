@@ -17,11 +17,11 @@ body {
 }
 
 .green-top-border {
- border-top: 3px solid rgb(106, 149,102);
+ border-top: 3px solid #6a9566;
 }
 
 .border-green {
-  border: 5px solid rgb(106, 149,102);
+  border: 5px solid #6a9566;
 }
 
 .black-background {
