@@ -1,14 +1,22 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom';
 import Navbar from '../components/Navbar/Navbar'
 import Footer from '../components/Footer/Footer'
+import Ticket from '../components/Ticket/Ticket'
 import { Button, Card, Elevation, Divider, Callout } from "@blueprintjs/core";
-import QRCode from 'qrcode.react';
+import html2canvas from 'html2canvas';
+import * as jsPDF from 'jspdf'
 
 export default class EventDetailContainer extends Component {
 
   printQRCode = () => {
-    ReactDOM.render(<MyDocument />, document.getElementById('root'));
+    const input = document.getElementById('ticket')
+    html2canvas(input)
+      .then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, 'JPEG', 0, 0);
+        pdf.save("download.pdf");
+      })
   }
 
   render() {
@@ -21,7 +29,6 @@ export default class EventDetailContainer extends Component {
               <div className="col-12 my-5">
                 <Card elevation={Elevation.THREE}>
                   <h5>Nombre del evento</h5>
-                  <QRCode value="http://facebook.github.io/react/" />
                   <Divider />
                   <div className="row">
                     <div className="col-12 mt-3">
@@ -57,6 +64,14 @@ export default class EventDetailContainer extends Component {
                         title element. Any additional HTML props will be spread to the rendered
                         element.
                       </Callout>
+                    </div>
+                    <div className="col-12 mt-3 pl-3 pt-3 green-top-border">
+                      <blockquote className="bp3-blockquote mb-4">
+                        <span className="font-weight-bold">TU BOLETO:</span>
+                      </blockquote>
+                      <div className="d-flex justify-content-center">
+                        <Ticket />
+                      </div>
                     </div>
                   </div>
                   <div className="row justify-content-around green-top-border pt-3 mt-5">

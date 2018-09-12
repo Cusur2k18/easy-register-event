@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@blueprintjs/core": "^3.5.1",
+    "html2canvas": "^1.0.0-alpha.12",
+    "jspdf": "^1.4.1",
     "qrcode.react": "^0.8.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
