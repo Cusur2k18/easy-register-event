@@ -1,10 +1,16 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom';
 import Navbar from '../components/Navbar/Navbar'
 import Footer from '../components/Footer/Footer'
 import { Button, Card, Elevation, Divider, Callout } from "@blueprintjs/core";
-
+import QRCode from 'qrcode.react';
 
 export default class EventDetailContainer extends Component {
+
+  printQRCode = () => {
+    ReactDOM.render(<MyDocument />, document.getElementById('root'));
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -15,13 +21,14 @@ export default class EventDetailContainer extends Component {
               <div className="col-12 my-5">
                 <Card elevation={Elevation.THREE}>
                   <h5>Nombre del evento</h5>
+                  <QRCode value="http://facebook.github.io/react/" />
                   <Divider />
                   <div className="row">
                     <div className="col-12 mt-3">
                       <img src="https://via.placeholder.com/350x80" alt="Event chido" className="img-fluid border-green" width="100%" />
                     </div>
                     <div className="col-12 col-md-8 pt-3 pl-3">
-                      <blockquote class="bp3-blockquote">
+                      <blockquote className="bp3-blockquote">
                         <span className="font-weight-bold">DATOS DEL EVENTO:</span>
                       </blockquote>
                       <ul className="list-group list-group-flush mt-5">
@@ -42,7 +49,7 @@ export default class EventDetailContainer extends Component {
                       </ul>
                     </div>
                     <div className="col-12 col-md-4 pt-3">
-                      <blockquote class="bp3-blockquote">
+                      <blockquote className="bp3-blockquote">
                         <span className="font-weight-bold">HORARIOS:</span>
                       </blockquote>
                       <Callout title="Visually important content" className="mt-5">
@@ -54,7 +61,7 @@ export default class EventDetailContainer extends Component {
                   </div>
                   <div className="row justify-content-around green-top-border pt-3 mt-5">
                     <Button icon="follower" text="Registrarme al evento" className="bp3-intent-primary"/>
-                    <Button icon="print" text="Imprimir constancia" className="bp3-intent-success"/>
+                    <Button icon="print" text="Imprimir constancia" className="bp3-intent-success" onClick={this.printQRCode}/>
                     <Button icon="trash" text="Borrar mi registro" className="bp3-intent-danger"/>
                   </div>
                 </Card>
