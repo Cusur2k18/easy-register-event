@@ -23,6 +23,15 @@
   font-size: large;
 }
 
+.white-text {
+  color: white;
+}
+
+.green-navbar {
+  background: #6a9566 !important;
+  color: white;
+}
+
 #ticket {
   background: #6a9566;
   color: white;

@@ -25,9 +25,9 @@ export default class HomeContainer extends Component {
         <Navbar />
         <section>
           <div className="container-fluid p-3 p-md-5">
-            <h2>Eventos para hoy <small className="text-muted">{this.now.toLocaleDateString()}</small></h2> <a href="">Ver mas</a>
+            <h2>Eventos para hoy <small className="text-muted">{this.now.toLocaleDateString()}</small></h2>
             <Divider />
-            <div className="row justify-content-around px-5">
+            <div className="row justify-content-around px-2 px-md-5">
               <TodayEvent onEventDetail={this.onEventDetailHandler}/>
               <TodayEvent onEventDetail={this.onEventDetailHandler}/>
               <TodayEvent onEventDetail={this.onEventDetailHandler}/>
