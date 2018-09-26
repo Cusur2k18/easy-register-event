@@ -32,8 +32,7 @@ export default class HomeContainer extends Component {
   now = new Date()
 
   state = {
-    searchCriteria: 'name',
-    todayEvents: []
+    searchCriteria: 'name'
   }
 
   onEventDetailHandler = () => {
@@ -41,6 +40,7 @@ export default class HomeContainer extends Component {
   }
 
   componentDidMount = () => {
+    this.props.actions.events.getTodayEvents()
     this.props.actions.events.getFilteredEvents()
   }
 

@@ -27,10 +27,28 @@ export default class AuthStore extends Container {
     this.setState({ todayEvents })
   }
 
-  getTodayEvents(allEvents) {
-    return allEvents.filter( e => {
-      return moment(e.startDateTime).isSame(moment().format())
+  getTodayEvents = () => {
+    const now = moment().format('YYYY-MM-DD');
+    const tomorrow = moment().add(1, 'd').format('YYYY-MM-DD');
+    const filter = JSON.stringify({
+      where: {
+        and: [
+          {
+            startDateTime: { gte: now }
+          },
+          {
+            startDateTime: { lt: tomorrow }
+          }
+        ]
+      }
     })
+    Api.get('/events?filter=' + filter)
+      .then(res => parseReq(res))
+      .then(response => {
+        this.setTodayEvents(response.data)
+        console.log('TCL: AuthStore -> getTodayEvents -> response', response);
+      })
+
   }
 
   getFilteredEvents = (params = {}) => {
@@ -41,7 +59,6 @@ export default class AuthStore extends Container {
       .then(response => {
         this.setLoading(false);
         this.setFilteredEvents(response.data)
-        this.setTodayEvents(this.getTodayEvents(response.data))
         console.log('TCL: AuthStore -> getFilteredEvents -> response', response);
       })
   }
