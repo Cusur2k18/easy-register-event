@@ -16,11 +16,53 @@ import LocalStore from '../store/LocalStore'
 
 export default class HomeContainer extends Component {
 
-  FILTER_OPTIONS = ['Buscar por Nombre', 'Buscar por Carrera'];
+  FILTER_OPTIONS = [
+    {
+      label: 'Buscar por Nombre',
+      value: 'name'
+    }, 
+    {
+      label: 'Buscar por Carrera',
+      value: 'career'
+    }
+  ];
+
   now = new Date()
+
+  state = {
+    searchCriteria: 'name'
+  }
 
   onEventDetailHandler = () => {
     this.props.history.push('event/3abe0fae-a0a7-4f92-95f1-ac3a03384a28')
+  }
+
+  componentDidMount = () => {
+    this.props.actions.events.getFilteredEvents()
+  }
+
+  handleSearch = (e) => {
+    console.log('TCL: HomeContainer -> handleSearch -> e.currentTarget.value', e.currentTarget.value);
+    const filter = this.getFilter(e.currentTarget.value)
+    console.log('TCL: HomeContainer -> handleSearch -> filter', filter);
+    this.props.actions.events.getFilteredEvents(filter)
+  }
+  
+  onHandleCriteriaSearch = (e) => {
+    console.log('TCL: HomeContainer -> onHandleCriteriaSearch -> e', e.currentTarget.value);
+    this.setState({ searchCriteria: e.currentTarget.value })    
+  }
+
+  getFilter = (nameFilter) => {
+    const { searchCriteria } = this.state
+    if (nameFilter) {
+      return {
+        where: {
+          [searchCriteria]: { like: `${nameFilter}`, options: 'i' }
+        }
+      }
+    }
+    return {}
   }
 
   render() {
@@ -55,8 +97,8 @@ export default class HomeContainer extends Component {
             <Divider />
             <div className="col-12 d-flex pt-3">
               <ControlGroup vertical={false}>
-                <HTMLSelect options={this.FILTER_OPTIONS} />
-                <InputGroup placeholder="Buscar eventos..." />
+                <HTMLSelect options={this.FILTER_OPTIONS} onChange={this.onHandleCriteriaSearch} />
+                <InputGroup placeholder="Buscar eventos..." onChange={this.handleSearch} />
                 <Button icon="arrow-right" />
               </ControlGroup>
             </div>

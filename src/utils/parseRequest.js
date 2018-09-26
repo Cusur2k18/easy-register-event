@@ -1,10 +1,10 @@
-export default request => {
+export default request => {;
   switch (request.status) {
     case 200: 
       return {
         statusCode: request.status,
         statusText: request.statusText,
-        data: request.data.response,
+        data: request.data.response || request.data,
         error: null
       }
     case 400: {
