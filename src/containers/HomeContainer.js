@@ -8,10 +8,12 @@ import {
   ControlGroup,
   InputGroup,
   Button,
-  HTMLSelect 
+  HTMLSelect,
+  NonIdealState
 } from '@blueprintjs/core';
 import { Subscribe } from 'unstated';
 import AuthStore from '../store/AuthStore'
+import EventStore from '../store/EventStore'
 import LocalStore from '../store/LocalStore'
 
 export default class HomeContainer extends Component {
@@ -30,7 +32,8 @@ export default class HomeContainer extends Component {
   now = new Date()
 
   state = {
-    searchCriteria: 'name'
+    searchCriteria: 'name',
+    todayEvents: []
   }
 
   onEventDetailHandler = () => {
@@ -79,35 +82,69 @@ export default class HomeContainer extends Component {
               isLoggedIn={!!LocalStore.getToken()}/>
           )}
         </Subscribe>
-        <section>
-          <div className="container-fluid p-3 p-md-5">
-            <h2>Eventos para hoy <small className="text-muted">{this.now.toLocaleDateString()}</small></h2>
-            <Divider />
-            <div className="row justify-content-around px-2 px-md-5">
-              <TodayEvent onEventDetail={this.onEventDetailHandler}/>
-              <TodayEvent onEventDetail={this.onEventDetailHandler}/>
-              <TodayEvent onEventDetail={this.onEventDetailHandler}/>
-              <TodayEvent onEventDetail={this.onEventDetailHandler}/>
-            </div>
-          </div>
-        </section>
-        <section className="soft-gray-background green-top-border pt-3 pb-5">
-          <div className="container">
-            <h2>Buscar eventos</h2>
-            <Divider />
-            <div className="col-12 d-flex pt-3">
-              <ControlGroup vertical={false}>
-                <HTMLSelect options={this.FILTER_OPTIONS} onChange={this.onHandleCriteriaSearch} />
-                <InputGroup placeholder="Buscar eventos..." onChange={this.handleSearch} />
-                <Button icon="arrow-right" />
-              </ControlGroup>
-            </div>
-            <div className="row d-flex justify-content-around">
-              <EventList 
-                onEventDetail={this.onEventDetailHandler}/>
-            </div>
-          </div>
-        </section>
+        <Subscribe to={[EventStore]}>
+        {events => (
+          <React.Fragment>
+            <section>
+              <div className="container-fluid p-3 p-md-5">
+              <h2>Eventos para hoy <small className="text-muted">{this.now.toLocaleDateString()}</small></h2>
+              <Divider />
+                <div className="row justify-content-around px-2 px-md-5">
+                  {events.state.todayEvents.length ? (
+                      <React.Fragment>
+                        <TodayEvent onEventDetail={this.onEventDetailHandler}/>
+                        <TodayEvent onEventDetail={this.onEventDetailHandler}/>
+                        <TodayEvent onEventDetail={this.onEventDetailHandler}/>
+                        <TodayEvent onEventDetail={this.onEventDetailHandler}/>
+                      </React.Fragment>
+                    ) 
+                    : (<NonIdealState
+                      icon="error"
+                      title="No hay eventos!"
+                      className="my-5"
+                      description={(
+                        <React.Fragment>
+                            <span className="font-weight-bold text-muted">
+                              No tenemos eventos para hoy
+                            </span>
+                        </React.Fragment>
+                      )}/>) }
+                </div>
+              </div>
+            </section>
+            <section className="soft-gray-background green-top-border pt-3 pb-5">
+              <div className="container">
+                <h2>Buscar eventos</h2>
+                <Divider />
+                <div className="col-12 d-flex pt-3">
+                  <ControlGroup vertical={false}>
+                    <HTMLSelect options={this.FILTER_OPTIONS} onChange={this.onHandleCriteriaSearch} />
+                    <InputGroup placeholder="Buscar eventos..." onChange={this.handleSearch} />
+                    <Button icon="arrow-right" />
+                  </ControlGroup>
+                </div>
+                <div className="row d-flex justify-content-around">
+                  {events.state.filteredEvents.length ? (
+                    <EventList 
+                    onEventDetail={this.onEventDetailHandler}/>
+                  ):
+                  (<NonIdealState
+                    icon="error"
+                    title="Sin resultados!"
+                    className="my-5"
+                    description={(
+                    <React.Fragment>
+                        <span className="font-weight-bold text-muted">
+                          No hay eventos con ese criterio
+                        </span>
+                    </React.Fragment>
+                  )}/>)}
+                </div>
+              </div>
+            </section>
+          </React.Fragment>
+        )}
+        </Subscribe>
         <Footer />
       </React.Fragment>
     )

@@ -26,6 +26,7 @@ body {
 
 .soft-gray-background { 
   background: #F2F2F2;
+  min-height: 58vh;
 }
 
 .green-top-border {
