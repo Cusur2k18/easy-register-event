@@ -45,7 +45,10 @@ export default class AuthContainer extends Component {
                     <Card elevation={Elevation.TWO}>
                       <h5 className="text-uppercase">Inicia Sesion</h5>
                       <Divider />
-                      <form className="p-5">
+                      <form className="p-5" onSubmit={(e) => {
+                        e.preventDefault();
+                        auth.login(this.state.userCode, this.state.nip)
+                      }}>
                         <FormGroup
                           label="Codigo"
                           labelFor="code-input">
@@ -60,8 +63,7 @@ export default class AuthContainer extends Component {
                         <Button 
                           rightIcon="tick"
                           className="bp3-intent-success"
-                          type="button"
-                          onClick={() => auth.login(this.state.userCode, this.state.nip) }
+                          type="submit"
                           loading={auth.state.loginLoading}>
                             Entrar
                           </Button>

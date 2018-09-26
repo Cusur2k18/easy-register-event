@@ -5,6 +5,7 @@ import parseReq from '../utils/parseRequest';
 import { Alert } from '../components/Alert/Alert'
 import { Intent } from '@blueprintjs/core'
 import LocalStore from './LocalStore'
+import * as Qs from 'qs'
 
 
 export default class AuthStore extends Container {
@@ -41,22 +42,24 @@ export default class AuthStore extends Container {
   }
 
   logout = async () => {
-    const tokenParams = new URLSearchParams(`access_token=${LocalStore.getToken()}`);
-    console.log('TCL: AuthStore -> logout -> tokenParams', tokenParams);
     await LocalStore.clear()
     this.setState({
       loggedUser: LocalStore.getUser(),
       loginLoading: false
     })
-    // Api.post('/students/logout', { params: tokenParams })
+    // Api.post(`/students/logout`, Qs.stringify({ access_token: LocalStore.getToken() }) )
     //   .then(res => parseReq(res))
-    //   .then( response => {
+    //   .then( async (response) => {
     //     console.log('TCL: AuthStore -> logout -> response', response);
-    //     LocalStore.clear()
+       
     //   })
-    //   .catch(err => {
+    //   .catch(async (err) => {
     //     const error = parseReq({ err });
-    //     LocalStore.clear()
+    //     await LocalStore.clear()
+    //     this.setState({
+    //       loggedUser: LocalStore.getUser(),
+    //       loginLoading: false
+    //     })
     //     Alert.show({ message: error.error, intent: Intent.DANGER, icon: 'warning-sign' })
     //   })
   }

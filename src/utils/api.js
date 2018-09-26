@@ -6,8 +6,4 @@ const instance = axios.create({
   timeout: 1000
 });
 
-if (LocalStore.getToken()) {
-  instance.defaults.headers.common['Authorization'] = LocalStore.getToken();
-}
-
 export default instance
