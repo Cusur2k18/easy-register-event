@@ -12,11 +12,16 @@ export default class AuthStore extends Container {
     filteredEvents: [],
     todayEvents: [],
     singleEvent: {},
-    loadingEventAction: false
+    loadingAllEvents: false,
+    loadingTodayEvents: false
   }
 
-  setLoading = loading => {
-    this.setState({ loadingEventAction: loading })
+  setTodayLoading = loadingTodayEvents => {
+    this.setState({ loadingTodayEvents })
+  }
+
+  setAllLoading = loadingAllEvents => {
+    this.setState({ loadingAllEvents })
   }
 
   setFilteredEvents = filteredEvents => {
@@ -28,6 +33,7 @@ export default class AuthStore extends Container {
   }
 
   getTodayEvents = () => {
+    this.setTodayLoading(true)
     const now = moment().format('YYYY-MM-DD');
     const tomorrow = moment().add(1, 'd').format('YYYY-MM-DD');
     const filter = JSON.stringify({
@@ -45,6 +51,7 @@ export default class AuthStore extends Container {
     Api.get('/events?filter=' + filter)
       .then(res => parseReq(res))
       .then(response => {
+        this.setTodayLoading(false)
         this.setTodayEvents(response.data)
         console.log('TCL: AuthStore -> getTodayEvents -> response', response);
       })
@@ -53,11 +60,11 @@ export default class AuthStore extends Container {
 
   getFilteredEvents = (params = {}) => {
     const filter = JSON.stringify(params)
-    this.setLoading(true);
+    this.setAllLoading(true);
     Api.get('/events?filter=' + filter)
       .then(res => parseReq(res))
       .then(response => {
-        this.setLoading(false);
+        this.setAllLoading(false);
         this.setFilteredEvents(response.data)
         console.log('TCL: AuthStore -> getFilteredEvents -> response', response);
       })
