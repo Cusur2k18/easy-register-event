@@ -14,7 +14,7 @@ export default class Root extends Component {
     return (
       <Switch>
         <Route path="/" exact render={(props) => <HomeContainer {...props} actions={this.props.apiProps} />} />
-        <Route path="/event/:id" component={EventDetailContainer} />
+        <Route path="/event/:id" render={(props) => <EventDetailContainer {...props} actions={this.props.apiProps}/>}  />
         <Route path="/login" component={AuthContainer} />
         <Redirect to="/" />
       </Switch>

@@ -20,6 +20,13 @@ export default class EventDetailContainer extends Component {
     downloadLoading: false
   }
 
+  
+  componentDidMount() {
+    console.log(this.props)
+    this.props.actions.events.getEventByUuid(this.props.match.params.id)
+  }
+  
+
   printQRCode = () => {
     this.setState({ downloadLoading: true })
     const input = document.getElementById('ticket')

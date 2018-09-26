@@ -35,8 +35,8 @@ export default class HomeContainer extends Component {
     searchCriteria: 'name'
   }
 
-  onEventDetailHandler = () => {
-    this.props.history.push('event/3abe0fae-a0a7-4f92-95f1-ac3a03384a28')
+  onEventDetailHandler = (uuid) => {
+    this.props.history.push(`event/${uuid}`)
   }
 
   componentDidMount = () => {

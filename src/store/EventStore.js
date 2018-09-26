@@ -13,9 +13,15 @@ export default class AuthStore extends Container {
     todayEvents: [],
     singleEvent: {},
     loadingAllEvents: false,
-    loadingTodayEvents: false
+    loadingTodayEvents: false,
+    loadingSingle: false
   }
 
+
+  /**
+   * Loadings
+   * @memberOf AuthStore
+   */
   setTodayLoading = loadingTodayEvents => {
     this.setState({ loadingTodayEvents })
   }
@@ -24,12 +30,25 @@ export default class AuthStore extends Container {
     this.setState({ loadingAllEvents })
   }
 
+  setSingleLoading = loadingSingle => {
+    this.setState({ loadingSingle })
+  }
+
+
+  /**
+   * Set properties
+   * @memberOf AuthStore
+   */
   setFilteredEvents = filteredEvents => {
     this.setState({ filteredEvents })
   }
 
   setTodayEvents = todayEvents => {
     this.setState({ todayEvents })
+  }
+
+  setSingleEvent = singleEvent => {
+    this.setState({ singleEvent })
   }
 
   getTodayEvents = () => {
@@ -67,6 +86,18 @@ export default class AuthStore extends Container {
         this.setAllLoading(false);
         this.setFilteredEvents(response.data)
         console.log('TCL: AuthStore -> getFilteredEvents -> response', response);
+      })
+  }
+
+  getEventByUuid = uuid => {
+    const filter = JSON.stringify({ where: { uuid }})
+    this.setSingleLoading(true)
+    Api.get('/events/findOne?filter=' + filter)
+      .then(res => parseReq(res))
+      .then(response => {
+        this.setSingleEvent(response.data)
+        this.setSingleLoading(false);
+        console.log('TCL: AuthStore -> getEventByUuid -> response', response);
       })
   }
 }

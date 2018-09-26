@@ -22,15 +22,15 @@ function EventList(props) {
     )}/>
   )
   if (props.events.length) {
-    content = props.events.map((e, i) => {
+    content = props.events.map((singleEvent, i) => {
       return (
-        <React.Fragment key={e.id}>
+        <React.Fragment key={singleEvent.id}>
           <div className="col-12 col-md-4 mt-4">
-            <div className="card clickable" onClick={() => {props.onEventDetail(e.uuid)}}>
-              <img className="card-img-top" src={e.coverImg ? e.coverImg : 'https://via.placeholder.com/150x150'} alt="Card" />
+            <div className="card clickable" onClick={() => {props.onEventDetail(singleEvent.uuid)}}>
+              <img className="card-img-top" src={singleEvent.coverImg ? singleEvent.coverImg : 'https://via.placeholder.com/150x150'} alt="Card" />
               <div className="card-body">
-                <h5 className="card-title">{e.name}</h5>
-                <p className="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <h5 className="card-title">{singleEvent.name}</h5>
+                <p className="card-text">{singleEvent.uuid}</p>
                 <p className="card-text"><small className="text-muted">Last updated 3 mins ago</small></p>
               </div>
             </div>
