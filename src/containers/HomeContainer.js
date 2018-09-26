@@ -126,6 +126,7 @@ export default class HomeContainer extends Component {
                 <div className="row d-flex justify-content-around">
                   {events.state.filteredEvents.length ? (
                     <EventList 
+                    events={events.state.filteredEvents}
                     onEventDetail={this.onEventDetailHandler}/>
                   ):
                   (<NonIdealState
