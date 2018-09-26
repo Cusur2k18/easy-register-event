@@ -8,7 +8,11 @@ import {
   ControlGroup,
   InputGroup,
   Button,
-  HTMLSelect } from '@blueprintjs/core';
+  HTMLSelect 
+} from '@blueprintjs/core';
+import { Subscribe } from 'unstated';
+import AuthStore from '../store/AuthStore'
+import LocalStore from '../store/LocalStore'
 
 export default class HomeContainer extends Component {
 
@@ -22,7 +26,17 @@ export default class HomeContainer extends Component {
   render() {
     return (
       <React.Fragment>
-        <Navbar />
+        <Subscribe to={[AuthStore]}>
+          {auth => (
+            <Navbar 
+              userName={auth.state.loggedUser.firstName ? `${auth.state.loggedUser.firstName} ${auth.state.loggedUser.lastName} ${auth.state.loggedUser.mLastName}`: ''}
+              onLogout={async () => {
+                await auth.logout()
+                this.props.history.push('login')
+              }}
+              isLoggedIn={!!LocalStore.getToken()}/>
+          )}
+        </Subscribe>
         <section>
           <div className="container-fluid p-3 p-md-5">
             <h2>Eventos para hoy <small className="text-muted">{this.now.toLocaleDateString()}</small></h2>

@@ -14,7 +14,8 @@ import Logo from '../../assets/cusurlogo.jpg'
 
 const propTypes = {
   userName: PropTypes.string,
-  isLoggedIn: PropTypes.bool
+  isLoggedIn: PropTypes.bool,
+  onLoginPage: PropTypes.bool
 }
 
 function NavbarComponent(props) {
@@ -22,13 +23,19 @@ function NavbarComponent(props) {
     <Button className={Classes.MINIMAL} icon="log-in" text="Entrar" onClick={() => { props.history.push('/login') }}/>
   )
   
+  if (props.onLoginPage) {
+    navbarBody = (
+      <Button className={Classes.MINIMAL} icon="home" text="Ir al inicio" onClick={() => { props.history.push('/') }}/>
+    )
+  }
+  
   if (props.isLoggedIn) {
     navbarBody = (
       <React.Fragment>
         <NavbarHeading>{props.userName}</NavbarHeading>
         <NavbarDivider />
         <Button className={Classes.MINIMAL} icon="user" text="Mi perfil" />
-        <Button className={Classes.MINIMAL} icon="log-out" text="Salir" onClick={() => { props.history.push('/login') }} />
+        <Button className={Classes.MINIMAL} icon="log-out" text="Salir" onClick={props.onLogout} />
       </React.Fragment>
     )
   }
@@ -52,8 +59,10 @@ function NavbarComponent(props) {
 NavbarComponent.propTypes = propTypes
 
 NavbarComponent.defaultProps = {
-  userName: 'Testing',
-  isLoggedIn: true
+  userName: 'No Aplica',
+  isLoggedIn: true,
+  onLogout: () => {},
+  onLoginPage: false
 }
 
 
