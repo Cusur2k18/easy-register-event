@@ -9,10 +9,18 @@ import {
   Divider,
   Callout,
   Position,
-  Tooltip
+  Tooltip,
+  Tag,
+  Intent,
+  NonIdealState
 } from "@blueprintjs/core";
 import html2canvas from 'html2canvas';
+import LocalStore from '../store/LocalStore';
+import { Subscribe } from 'unstated';
+import AuthStore from '../store/AuthStore'
 import * as jsPDF from 'jspdf'
+import * as moment from 'moment'
+import RCTMarkdown from 'react-markdown';
 
 export default class EventDetailContainer extends Component {
 
@@ -41,58 +49,117 @@ export default class EventDetailContainer extends Component {
   }
 
   render() {
+    const singleEvent = this.props.actions.events.state.singleEvent;
+    const isCurrentUserEnrolled = !!(singleEvent.students && singleEvent.students.find(st => st.studentCode === LocalStore.getUser().studentCode))
+    const isEventFinish = moment(singleEvent.endDateTime).isBefore(moment().format())
+    let actions = []
+
+    if (LocalStore.getToken()) {
+      actions = [<Button key="register" icon="follower" text="Registrarme al evento" className="bp3-intent-primary mt-3 mt-md-0"/>]
+    }
+    if (isCurrentUserEnrolled) {
+      actions = [<Button key="erase" icon="trash" text="Borrar mi registro" className="bp3-intent-danger mt-3 mt-md-0"/>]
+    }
+    if (isEventFinish) {
+      actions.push(<Button key="print" icon="print" text="Imprimir constancia" className="bp3-intent-success mt-3 mt-md-0" />)
+    }
+
     return (
       <React.Fragment>
-        <Navbar />
+        <Subscribe to={[AuthStore]}>
+          {auth => (
+            <Navbar 
+              userName={auth.state.loggedUser.firstName ? `${auth.state.loggedUser.firstName} ${auth.state.loggedUser.lastName} ${auth.state.loggedUser.mLastName}`: ''}
+              onLogout={async () => {
+                await auth.logout()
+                this.props.history.push('/login')
+              }}
+              isLoggedIn={!!LocalStore.getToken()}/>
+          )}
+        </Subscribe>
         <section>
           <div className="container">
             <div className="row">
               <div className="col-12 my-5">
                 <Card elevation={Elevation.THREE}>
-                  <h5>Nombre del evento</h5>
+                  <h5>{singleEvent.name}</h5>
                   <Divider />
                   <div className="row">
-                    <div className="col-12 mt-3">
-                      <img src="https://via.placeholder.com/350x80" alt="Event chido" className="img-fluid border-green" width="100%" />
+                    <div className="col-12 mt-3" width="100%">
+                      <img src={singleEvent.coverImg ? singleEvent.coverImg : 'https://via.placeholder.com/350x80' } alt={singleEvent.name} className="img-fluid border-green" width="100%"/>
                     </div>
                     <div className="col-12 col-md-8 pt-3 pl-3">
                       <blockquote className="bp3-blockquote">
                         <span className="font-weight-bold">DATOS DEL EVENTO:</span>
                       </blockquote>
-                      <ul className="list-group list-group-flush mt-3 mt-md-5">
-                        <li className="list-group-item">Cras justo odio</li>
-                        <li className="list-group-item">Dapibus ac facilisis in</li>
-                        <li className="list-group-item">Morbi leo risus</li>
-                        <li className="list-group-item">Porta ac consectetur ac</li>
-                        <li className="list-group-item">Vestibulum at eros</li>
-                      </ul>
+                      <div className="mt-4 mt-md-5">
+                        <RCTMarkdown source={singleEvent.description} />
+                      </div>
                     </div>
                     <div className="col-12 col-md-4 pt-3">
                       <blockquote className="bp3-blockquote">
-                        <span className="font-weight-bold">HORARIOS:</span>
+                        <span className="font-weight-bold">OTRA INFORMACION:</span>
                       </blockquote>
-                      <Callout title="Visually important content" className="mt-3 mt-md-5">
-                        The component is a simple wrapper around the CSS API that provides props for modifiers and optional
-                        title element. Any additional HTML props will be spread to the rendered
-                        element.
+                      <Callout title="" className="mt-3 mt-md-5">
+                        <ul className="list-group list-group-flush">
+                          <li className="list-group-item font-weight-bold">Fecha de Inicio:</li>
+                          <li className="list-group-item">{moment(singleEvent.startDateTime).format('dddd DD MMM YYYY hh:mm a')}</li>
+                          <li className="list-group-item font-weight-bold">Fecha de Finalizacion:</li>
+                          <li className="list-group-item">{moment(singleEvent.endDateTime).format('dddd DD MMM YYYY hh:mm a')}</li>
+                          <li className="list-group-item font-weight-bold">Personas registradas al evento:</li>
+                          <li className="list-group-item">
+                            <Tag
+                              intent={Intent.SUCCESS}
+                              round>
+                              {singleEvent.students && singleEvent.students.length}
+                            </Tag>
+                          </li>
+                        </ul>
                       </Callout>
                     </div>
                     <div className="col-12 mt-3 pl-3 pt-3 green-top-border">
-                      <blockquote className="bp3-blockquote mb-4">
-                        <span className="font-weight-bold">TU BOLETO:</span>
-                          <Tooltip content="Descarga tu boleto" position={Position.TOP} hoverCloseDelay={100} className="float-right">
-                            <Button icon="download" className="bp3-intent-primary" loading={this.state.downloadLoading} onClick={this.printQRCode}/>
-                          </Tooltip>
-                      </blockquote>
-                      <div className="d-flex justify-content-center">
-                        <Ticket />
-                      </div>
+                    {!!LocalStore.getToken() ? (
+                      isCurrentUserEnrolled ? (
+                        <React.Fragment>
+                          <blockquote className="bp3-blockquote mb-4">
+                            <span className="font-weight-bold">TU BOLETO:</span>
+                              <Tooltip content="Descarga tu boleto" position={Position.TOP} hoverCloseDelay={100} className="float-right">
+                                <Button icon="download" className="bp3-intent-primary" loading={this.state.downloadLoading} onClick={this.printQRCode}/>
+                              </Tooltip>
+                          </blockquote>
+                          <div className="d-flex justify-content-center">
+                            <Ticket />
+                          </div>
+                        </React.Fragment>
+                        ) : (<NonIdealState
+                              icon="blocked-person"
+                              title="Sin registro"
+                              className="mt-2"
+                              description={(
+                                <React.Fragment>
+                                    <span className="font-weight-bold text-danger">
+                                      No estas registrado a este evento
+                                    </span>
+                                </React.Fragment>
+                              )}/>)
+                    ) : (<NonIdealState
+                      icon="log-in"
+                      title="Ups!!"
+                      className="mt-3"
+                      description={(
+                        <React.Fragment>
+                            <span className="font-weight-bold text-danger">
+                              Inicia sesion para poder registrarte a un evento <br/><br/><br/>
+                              <Button text="Iniciar Sesion" className="bp3-intent-primary mt-3 mt-md-0" onClick={() => {this.props.history.push('/login')}}/>
+                            </span>
+                        </React.Fragment>
+                      )}/>)}
+                    
                     </div>
                   </div>
                   <div className="row flex-column flex-sm-row justify-content-between justify-content-md-around green-top-border px-3 px-md-0 pt-3 mt-5">
-                    <Button icon="follower" text="Registrarme al evento" className="bp3-intent-primary mt-3 mt-md-0"/>
-                    <Button icon="print" text="Imprimir constancia" className="bp3-intent-success mt-3 mt-md-0" />
-                    <Button icon="trash" text="Borrar mi registro" className="bp3-intent-danger mt-3 mt-md-0"/>
+                    { actions }
+                    
                   </div>
                 </Card>
               </div>

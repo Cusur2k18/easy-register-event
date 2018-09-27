@@ -90,7 +90,7 @@ export default class AuthStore extends Container {
   }
 
   getEventByUuid = uuid => {
-    const filter = JSON.stringify({ where: { uuid }})
+    const filter = JSON.stringify({ where: { uuid }, include: 'students'})
     this.setSingleLoading(true)
     Api.get('/events/findOne?filter=' + filter)
       .then(res => parseReq(res))
