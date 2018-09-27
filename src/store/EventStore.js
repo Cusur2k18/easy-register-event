@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container } from 'unstated';
 import Api from '../utils/api';
+import SecureApi from '../utils/api-secure';
 import parseReq from '../utils/parseRequest';
 import { Alert } from '../components/Alert/Alert'
 import { Intent } from '@blueprintjs/core'
@@ -98,6 +99,15 @@ export default class AuthStore extends Container {
         this.setSingleEvent(response.data)
         this.setSingleLoading(false);
         console.log('TCL: AuthStore -> getEventByUuid -> response', response);
+      })
+  }
+
+  doEnrollment = eventId => {
+    const userId = LocalStore.getUser().id
+    SecureApi.post('/enrollments', { eventId, userId })
+      .then(res => parseReq(res))
+      .then(response => {
+        console.log('TCL: AuthStore -> doEnrollment -> response', response);
       })
   }
 }

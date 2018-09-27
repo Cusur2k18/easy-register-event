@@ -48,6 +48,10 @@ export default class EventDetailContainer extends Component {
       })
   }
 
+  enrollUser = eventId => {
+    this.props.actions.events.doEnrollment(eventId)
+  }
+
   render() {
     const singleEvent = this.props.actions.events.state.singleEvent;
     const isCurrentUserEnrolled = !!(singleEvent.students && singleEvent.students.find(st => st.studentCode === LocalStore.getUser().studentCode))
@@ -55,7 +59,7 @@ export default class EventDetailContainer extends Component {
     let actions = []
 
     if (LocalStore.getToken()) {
-      actions = [<Button key="register" icon="follower" text="Registrarme al evento" className="bp3-intent-primary mt-3 mt-md-0"/>]
+      actions = [<Button key="register" icon="follower" text="Registrarme al evento" onClick={() => {this.enrollUser(singleEvent.id)}} className="bp3-intent-primary mt-3 mt-md-0"/>]
     }
     if (isCurrentUserEnrolled) {
       actions = [<Button key="erase" icon="trash" text="Borrar mi registro" className="bp3-intent-danger mt-3 mt-md-0"/>]
