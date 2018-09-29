@@ -6,6 +6,7 @@ import EventStore from './store/EventStore'
 import { Subscribe } from 'unstated';
 import * as moment from 'moment';
 import 'moment/locale/es';
+import 'sweetalert2/src/sweetalert2.scss'
 
 moment.locale('es');
 

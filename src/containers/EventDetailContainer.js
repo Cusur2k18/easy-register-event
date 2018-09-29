@@ -52,17 +52,34 @@ export default class EventDetailContainer extends Component {
     this.props.actions.events.doEnrollment(eventId)
   }
 
+  removeEnrollment = () => {
+    this.props.actions.events.deleteEnrollment()
+  }
+
   render() {
-    const singleEvent = this.props.actions.events.state.singleEvent;
+    const { loadingRegister, singleEvent } = this.props.actions.events.state;
     const isCurrentUserEnrolled = !!(singleEvent.students && singleEvent.students.find(st => st.studentCode === LocalStore.getUser().studentCode))
     const isEventFinish = moment(singleEvent.endDateTime).isBefore(moment().format())
     let action
 
     if (LocalStore.getToken() && !isEventFinish) {
-      action = <Button key="register" icon="follower" text="Registrarme al evento" onClick={() => {this.enrollUser(singleEvent.id)}} className="bp3-intent-primary mt-3 mt-md-0"/>
+      action = (
+        <Button
+          key="register"
+          icon="follower"
+          loading={loadingRegister}
+          text="Registrarme al evento"
+          onClick={() => { this.enrollUser(singleEvent.id) }}
+          className="bp3-intent-primary mt-3 mt-md-0"/>)
     }
     if (isCurrentUserEnrolled) {
-      action = <Button key="erase" icon="trash" text="Borrar mi registro" className="bp3-intent-danger mt-3 mt-md-0"/>
+      action = (
+        <Button
+          key="erase"
+          icon="trash"
+          text="Borrar mi registro"
+          onClick={this.removeEnrollment}
+          className="bp3-intent-danger mt-3 mt-md-0"/>)
     }
     if (isEventFinish && isCurrentUserEnrolled) {
       action = <Button key="print" icon="print" text="Imprimir constancia" className="bp3-intent-success mt-3 mt-md-0" />

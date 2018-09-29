@@ -16,6 +16,7 @@
     "react-responsive-carousel": "^3.1.42",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.5",
+    "sweetalert2": "^7.28.4",
     "unstated": "^2.1.1"
   },
   "scripts": {
