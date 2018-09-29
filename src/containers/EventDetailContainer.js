@@ -56,6 +56,13 @@ export default class EventDetailContainer extends Component {
     this.props.actions.events.deleteEnrollment()
   }
 
+  onLoginNeed = uuid => {
+    this.props.history.push({
+      pathname: '/login',
+      search: '?redirect_detail=' + uuid
+    })
+  }
+
   render() {
     const { loadingAction, singleEvent, currentEnrollment } = this.props.actions.events.state;
     const isCurrentUserEnrolled = !!(singleEvent.students && singleEvent.students.find(st => st.studentCode === LocalStore.getUser().studentCode))
@@ -187,7 +194,7 @@ export default class EventDetailContainer extends Component {
                         <React.Fragment>
                             <span className="font-weight-bold text-danger">
                               Inicia sesion para poder registrarte a un evento <br/><br/><br/>
-                              <Button text="Iniciar Sesion" className="bp3-intent-primary mt-3 mt-md-0" onClick={() => {this.props.history.push('/login')}}/>
+                              <Button text="Iniciar Sesion" className="bp3-intent-primary mt-3 mt-md-0" onClick={() => {this.onLoginNeed(singleEvent.uuid)}}/>
                             </span>
                         </React.Fragment>
                       )}/>)}

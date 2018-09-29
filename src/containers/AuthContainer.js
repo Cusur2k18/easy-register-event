@@ -12,13 +12,23 @@ import {
 import { Redirect } from 'react-router-dom'
 import { Subscribe } from 'unstated';
 import AuthStore from '../store/AuthStore'
+import { getQueryString } from '../utils/getQuerystring'
 
 
 export default class AuthContainer extends Component {
   state = {
     userCode: null,
-    nip: null
+    nip: null,
+    shouldRedirect: null,
+    uuid: null
   }
+
+  componentDidMount = () => {
+    console.log('ATUH ',this.props)
+    const shouldRedirect = getQueryString(this.props.location.search)
+    this.setState({ shouldRedirect: shouldRedirect.hasOwnProperty('redirect_detail'), uuid: shouldRedirect.redirect_detail })
+  };
+  
 
   setUserCode = e => {
     this.setState({ userCode: e.target.value })
@@ -29,12 +39,13 @@ export default class AuthContainer extends Component {
   }
 
   render() {
+    const redirectTo = this.state.shouldRedirect ? `/event/${this.state.uuid}` : '/'
     return (
       <Subscribe to={[AuthStore]}>
       {auth => (
         <React.Fragment>
           { console.log(auth.state.loggedUser) }
-          {auth.state.loggedUser.hasOwnProperty('id') ? <Redirect to="/"/> 
+          {auth.state.loggedUser.hasOwnProperty('id') ? <Redirect to={redirectTo}/> 
           : <React.Fragment>
               <div>
                 <Navbar isLoggedIn={false} onLoginPage={true}/>
