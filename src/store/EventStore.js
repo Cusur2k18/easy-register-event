@@ -89,7 +89,7 @@ export default class AuthStore extends Container {
   getFilteredEvents = (params = {}) => {
     const filter = JSON.stringify(params)
     this.setAllLoading(true);
-    Api.get('/events?filter=' + filter)
+    Api.get('/events?filter=' + encodeURIComponent(filter))
       .then(res => parseReq(res))
       .then(response => {
         this.setAllLoading(false);

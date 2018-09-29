@@ -61,7 +61,7 @@ export default class HomeContainer extends Component {
     if (nameFilter) {
       return {
         where: {
-          [searchCriteria]: { like: `${nameFilter}`, options: 'i' }
+          [searchCriteria]: { like: '%'+ nameFilter +'%' }
         }
       }
     }
