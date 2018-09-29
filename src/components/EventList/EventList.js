@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { NonIdealState } from '@blueprintjs/core'
+import { NonIdealState, Divider } from '@blueprintjs/core'
+import * as moment from 'moment'
 
 const propTypes = {
   events: PropTypes.array,
@@ -30,8 +31,13 @@ function EventList(props) {
               <img className="card-img-top" src={singleEvent.coverImg ? singleEvent.coverImg : 'https://via.placeholder.com/150x150'} alt="Card" />
               <div className="card-body">
                 <h5 className="card-title">{singleEvent.name}</h5>
-                <p className="card-text">{singleEvent.uuid}</p>
-                <p className="card-text"><small className="text-muted">Last updated 3 mins ago</small></p>
+                <Divider />
+                <p>Empieza: <b>{moment(singleEvent.startDateTime).format('ddd d MMM YYYY hh:mm a')}</b></p>
+                <p>Termina: <b>{moment(singleEvent.endDateTime).format('ddd d MMM YYYY hh:mm a')}</b></p>
+                <Divider />
+                <div className="card-text m-t-3">
+                  <p className="font-weight-bold">Carrera: <span className="text-uppercase">{singleEvent.career}</span></p>
+                </div>
               </div>
             </div>
           </div>

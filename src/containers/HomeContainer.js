@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Navbar from '../components/Navbar/Navbar'
-import TodayEvent from '../components/TodayEvent/TodayEvent'
+import TodayEvents from '../components/TodayEvents/TodayEvents'
 import EventList from '../components/EventList/EventList'
 import Footer from '../components/Footer/Footer'
 import { 
@@ -86,17 +86,15 @@ export default class HomeContainer extends Component {
         {events => (
           <React.Fragment>
             <section>
-              <div className="container-fluid p-3 p-md-5">
+              <div className="container-fluid p-2 px-md-5 py-md-2">
               <h2>Eventos para hoy <small className="text-muted">{this.now.toLocaleDateString()}</small></h2>
               <Divider />
                 <div className="row justify-content-around px-2 px-md-5">
                   {events.state.todayEvents.length ? (
-                      <React.Fragment>
-                        <TodayEvent onEventDetail={this.onEventDetailHandler}/>
-                        <TodayEvent onEventDetail={this.onEventDetailHandler}/>
-                        <TodayEvent onEventDetail={this.onEventDetailHandler}/>
-                        <TodayEvent onEventDetail={this.onEventDetailHandler}/>
-                      </React.Fragment>
+                      <TodayEvents 
+                        onEventDetail={this.onEventDetailHandler}
+                        events={events.state.filteredEvents}
+                        />
                     ) 
                     : (<NonIdealState
                       icon="error"

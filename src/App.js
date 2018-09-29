@@ -4,6 +4,11 @@ import '@blueprintjs/core/lib/css/blueprint.css'
 import Root from './Root'
 import EventStore from './store/EventStore'
 import { Subscribe } from 'unstated';
+import * as moment from 'moment';
+import 'moment/locale/es';
+
+moment.locale('es');
+
 
 
 class App extends Component {

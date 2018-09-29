@@ -32,6 +32,14 @@
   color: white;
 }
 
+.today-image {
+  max-height: 500px;
+}
+
+.card-img-top {
+  max-height: 200px;
+}
+
 #ticket {
   background: #6a9566;
   color: white;
@@ -45,4 +53,15 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.carousel .slide .legend {
+  background: rgba(255,255,255, .9) !important;
+  width: 300px !important;
+  color: black !important;
+  opacity: 1 !important;
+  left: 45% !important;
+  bottom: 0 !important;
+  border-radius: 0 !important;
+
 }
