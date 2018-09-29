@@ -93,7 +93,7 @@ export default class HomeContainer extends Component {
                   {events.state.todayEvents.length ? (
                       <TodayEvents 
                         onEventDetail={this.onEventDetailHandler}
-                        events={events.state.filteredEvents}
+                        events={events.state.todayEvents}
                         />
                     ) 
                     : (<NonIdealState

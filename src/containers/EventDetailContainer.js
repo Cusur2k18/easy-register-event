@@ -56,16 +56,19 @@ export default class EventDetailContainer extends Component {
     const singleEvent = this.props.actions.events.state.singleEvent;
     const isCurrentUserEnrolled = !!(singleEvent.students && singleEvent.students.find(st => st.studentCode === LocalStore.getUser().studentCode))
     const isEventFinish = moment(singleEvent.endDateTime).isBefore(moment().format())
-    let actions = []
+    let action
 
-    if (LocalStore.getToken()) {
-      actions = [<Button key="register" icon="follower" text="Registrarme al evento" onClick={() => {this.enrollUser(singleEvent.id)}} className="bp3-intent-primary mt-3 mt-md-0"/>]
+    if (LocalStore.getToken() && !isEventFinish) {
+      action = <Button key="register" icon="follower" text="Registrarme al evento" onClick={() => {this.enrollUser(singleEvent.id)}} className="bp3-intent-primary mt-3 mt-md-0"/>
     }
     if (isCurrentUserEnrolled) {
-      actions = [<Button key="erase" icon="trash" text="Borrar mi registro" className="bp3-intent-danger mt-3 mt-md-0"/>]
+      action = <Button key="erase" icon="trash" text="Borrar mi registro" className="bp3-intent-danger mt-3 mt-md-0"/>
     }
-    if (isEventFinish) {
-      actions.push(<Button key="print" icon="print" text="Imprimir constancia" className="bp3-intent-success mt-3 mt-md-0" />)
+    if (isEventFinish && isCurrentUserEnrolled) {
+      action = <Button key="print" icon="print" text="Imprimir constancia" className="bp3-intent-success mt-3 mt-md-0" />
+    }
+    if (isEventFinish && !isCurrentUserEnrolled) {
+      action = <h4 className="text-muted text-uppercase">El evento ya termino</h4>
     }
 
     return (
@@ -162,7 +165,7 @@ export default class EventDetailContainer extends Component {
                     </div>
                   </div>
                   <div className="row flex-column flex-sm-row justify-content-between justify-content-md-around green-top-border px-3 px-md-0 pt-3 mt-5">
-                    { actions }
+                    { action }
                     
                   </div>
                 </Card>
