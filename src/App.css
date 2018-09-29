@@ -40,6 +40,10 @@
   max-height: 200px;
 }
 
+.cover-img {
+  max-height: 450px;
+}
+
 #ticket {
   background: #6a9566;
   color: white;

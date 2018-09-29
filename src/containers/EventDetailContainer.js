@@ -57,7 +57,7 @@ export default class EventDetailContainer extends Component {
   }
 
   render() {
-    const { loadingRegister, singleEvent } = this.props.actions.events.state;
+    const { loadingAction, singleEvent, currentEnrollment } = this.props.actions.events.state;
     const isCurrentUserEnrolled = !!(singleEvent.students && singleEvent.students.find(st => st.studentCode === LocalStore.getUser().studentCode))
     const isEventFinish = moment(singleEvent.endDateTime).isBefore(moment().format())
     let action
@@ -67,7 +67,7 @@ export default class EventDetailContainer extends Component {
         <Button
           key="register"
           icon="follower"
-          loading={loadingRegister}
+          loading={loadingAction}
           text="Registrarme al evento"
           onClick={() => { this.enrollUser(singleEvent.id) }}
           className="bp3-intent-primary mt-3 mt-md-0"/>)
@@ -77,12 +77,18 @@ export default class EventDetailContainer extends Component {
         <Button
           key="erase"
           icon="trash"
+          loading={loadingAction}
           text="Borrar mi registro"
           onClick={this.removeEnrollment}
           className="bp3-intent-danger mt-3 mt-md-0"/>)
     }
     if (isEventFinish && isCurrentUserEnrolled) {
-      action = <Button key="print" icon="print" text="Imprimir constancia" className="bp3-intent-success mt-3 mt-md-0" />
+      action = (
+        <Button
+          key="print"
+          icon="print"
+          text="Imprimir constancia"
+          className="bp3-intent-success mt-3 mt-md-0" />)
     }
     if (isEventFinish && !isCurrentUserEnrolled) {
       action = <h4 className="text-muted text-uppercase">El evento ya termino</h4>
@@ -110,7 +116,7 @@ export default class EventDetailContainer extends Component {
                   <Divider />
                   <div className="row">
                     <div className="col-12 mt-3" width="100%">
-                      <img src={singleEvent.coverImg ? singleEvent.coverImg : 'https://via.placeholder.com/350x80' } alt={singleEvent.name} className="img-fluid border-green" width="100%"/>
+                      <img src={singleEvent.coverImg ? singleEvent.coverImg : 'https://via.placeholder.com/350x80' } alt={singleEvent.name} className="img-fluid border-green cover-img" width="100%"/>
                     </div>
                     <div className="col-12 col-md-8 pt-3 pl-3">
                       <blockquote className="bp3-blockquote">
@@ -118,6 +124,10 @@ export default class EventDetailContainer extends Component {
                       </blockquote>
                       <div className="mt-4 mt-md-5">
                         <RCTMarkdown source={singleEvent.description} />
+                      </div>
+                      <div className="mt-4 mt-md-5">
+                        <Divider />
+                        <p className="font-weigth-bold">Carrera:</p> <span className="text-uppercase">{singleEvent.career}</span>
                       </div>
                     </div>
                     <div className="col-12 col-md-4 pt-3">
@@ -152,7 +162,10 @@ export default class EventDetailContainer extends Component {
                               </Tooltip>
                           </blockquote>
                           <div className="d-flex justify-content-center">
-                            <Ticket />
+                            <Ticket 
+                              data={currentEnrollment}
+                              user={LocalStore.getUser()}
+                              event={singleEvent}/>
                           </div>
                         </React.Fragment>
                         ) : (<NonIdealState

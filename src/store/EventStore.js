@@ -14,10 +14,11 @@ export default class AuthStore extends Container {
     filteredEvents: [],
     todayEvents: [],
     singleEvent: {},
+    currentEnrollment: {},
     loadingAllEvents: false,
     loadingTodayEvents: false,
     loadingSingle: false,
-    loadingRegister: false
+    loadingAction: false
   }
 
 
@@ -37,8 +38,8 @@ export default class AuthStore extends Container {
     this.setState({ loadingSingle })
   }
 
-  setloadingRegister = loadingRegister => {
-    this.setState({ loadingRegister })
+  setloadingAction = loadingAction => {
+    this.setState({ loadingAction })
   }
 
 
@@ -55,7 +56,8 @@ export default class AuthStore extends Container {
   }
 
   setSingleEvent = singleEvent => {
-    this.setState({ singleEvent })
+    const currentEnrollment = LocalStore.getEnrollments().find(er => er.eventId === singleEvent.id)
+    this.setState({ singleEvent, currentEnrollment })
   }
 
   getTodayEvents = () => {
@@ -122,13 +124,13 @@ export default class AuthStore extends Container {
 
   doEnrollment = eventId => {
     const userId = LocalStore.getUser().id
-    this.setloadingRegister(true);
+    this.setloadingAction(true);
     SecureApi.post('/enrollments', { eventId, userId })
       .then(res => parseReq(res))
       .then(response => {
         console.log('TCL: AuthStore -> doEnrollment -> response', response);
         LocalStore.setEnrollments([...LocalStore.getEnrollments(), response.data])
-        this.setloadingRegister(false)
+        this.setloadingAction(false)
         swal({
           title: 'Listo!',
           text: 'Tu registro esta hecho! Te esperamos en el evento, \n No olvide imprimir tu boleto y llevarlo o no obtendras asistencia.',
@@ -141,24 +143,38 @@ export default class AuthStore extends Container {
   }
 
   deleteEnrollment = () => {
-    const { singleEvent } = this.state;
-    const allEnrollments = LocalStore.getEnrollments()
-    const singleEnrollment = allEnrollments.find( e => e.eventId === singleEvent.id )
-    if (singleEnrollment) {
-      LocalStore.setEnrollments(allEnrollments.filter(er => er.id !== singleEnrollment.id))
-      SecureApi.delete(`/enrollments/${singleEnrollment.id}`)
-        .then(res => parseReq(res))
-        .then(response => {
-          console.log('TCL: AuthStore -> deleteEnrollment -> response', response);
-          swal({
-            title: 'Listo!',
-            text: 'Tu registro se borro!',
-            type: 'success',
-            onClose: () => {
-              this.getEventById(singleEvent.id)
-            }
+    swal({
+      title: '¿Estas seguro que quieres borrar tu registro a este evento?',
+      type: 'warning',
+      showCloseButton: true,
+      showCancelButton: true,
+      focusConfirm: false,
+      confirmButtonText: 'Si estoy seguro! Borra mi registro',
+      cancelButtonText:'No! no borres mi registro'
+    }).then((result) => {
+     if (result.value) {
+      const { singleEvent } = this.state;
+      const allEnrollments = LocalStore.getEnrollments()
+      const singleEnrollment = allEnrollments.find( e => e.eventId === singleEvent.id )
+      if (singleEnrollment) {
+        LocalStore.setEnrollments(allEnrollments.filter(er => er.id !== singleEnrollment.id))
+        this.setloadingAction(true);
+        SecureApi.delete(`/enrollments/${singleEnrollment.id}`)
+          .then(res => parseReq(res))
+          .then(response => {
+            console.log('TCL: AuthStore -> deleteEnrollment -> response', response);
+            this.setloadingAction(false);
+            swal({
+              title: 'Listo!',
+              text: 'Tu registro se borro!',
+              type: 'success',
+              onClose: () => {
+                this.getEventById(singleEvent.id)
+              }
+            })
           })
-        })
-    }
+      }
+     }
+    })
   }
 }
