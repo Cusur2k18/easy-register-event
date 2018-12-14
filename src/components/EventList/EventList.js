@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { NonIdealState, Divider } from '@blueprintjs/core'
 import * as moment from 'moment'
+import transformImage from '../../utils/transformImage'
 
 const propTypes = {
   events: PropTypes.array,
@@ -28,12 +29,12 @@ function EventList(props) {
         <React.Fragment key={singleEvent.id}>
           <div className="col-12 col-md-4 mt-4">
             <div className="card clickable" onClick={() => {props.onEventDetail(singleEvent.uuid)}}>
-              <img className="card-img-top" src={singleEvent.coverImg ? singleEvent.coverImg : 'https://via.placeholder.com/150x150'} alt="Card" />
+              <img className="card-img-top" src={singleEvent.cover ? transformImage(singleEvent.cover, ['w_150', 'h_150']) : 'https://via.placeholder.com/150x150'} alt="Card" />
               <div className="card-body">
                 <h5 className="card-title">{singleEvent.name}</h5>
                 <Divider />
-                <p>Empieza: <b>{moment(singleEvent.startDateTime).format('ddd d MMM YYYY hh:mm a')}</b></p>
-                <p>Termina: <b>{moment(singleEvent.endDateTime).format('ddd d MMM YYYY hh:mm a')}</b></p>
+                <p>Empieza: <b>{moment.utc(singleEvent.start_date).format('ll')} - {moment.utc(singleEvent.start_date).format('h:mm a')}</b></p>
+                <p>Termina: <b>{moment.utc(singleEvent.end_date).format('ll')} - {moment.utc(singleEvent.end_date).format('h:mm a')}</b></p>
                 <Divider />
                 <div className="card-text m-t-3">
                   <p className="font-weight-bold">Carrera: <span className="text-uppercase">{singleEvent.career}</span></p>
