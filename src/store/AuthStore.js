@@ -25,13 +25,19 @@ export default class AuthStore extends Container {
 
   login = (studentCode, nip) => {
     this.setLoading(true)
-    Api.post('/students/signin', { studentCode, nip })
+    Api.post('/students/login', JSON.stringify({ studentCode, nip}), { headers: {'Content-Type': 'application/json'} })
       .then(res => parseReq(res))
-      .then( response => {
+      .then(response => {
         console.log('TCL: AuthStore -> login -> response', response);
-        this.setUser(response.data.user)
-        LocalStore.setUser(response.data.user)
-        LocalStore.setToken(response.data.id)
+        if (response.data.error) {
+          this.setLoading(false)
+          Alert.show({ message: response.data.error, intent: Intent.DANGER, icon: 'warning-sign' })
+          return
+        }
+
+        const user = { id: response.data.id, career: response.data.career, name: response.data.name, studentCode: response.data.student_code }
+        this.setUser(user)
+        LocalStore.setUser(user)
         this.setLoading(false)
       })
       .catch(err => {
@@ -47,20 +53,5 @@ export default class AuthStore extends Container {
       loggedUser: LocalStore.getUser(),
       loginLoading: false
     })
-    // Api.post(`/students/logout`, Qs.stringify({ access_token: LocalStore.getToken() }) )
-    //   .then(res => parseReq(res))
-    //   .then( async (response) => {
-    //     console.log('TCL: AuthStore -> logout -> response', response);
-       
-    //   })
-    //   .catch(async (err) => {
-    //     const error = parseReq({ err });
-    //     await LocalStore.clear()
-    //     this.setState({
-    //       loggedUser: LocalStore.getUser(),
-    //       loginLoading: false
-    //     })
-    //     Alert.show({ message: error.error, intent: Intent.DANGER, icon: 'warning-sign' })
-    //   })
   }
 }

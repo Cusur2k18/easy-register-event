@@ -44,8 +44,7 @@ export default class AuthContainer extends Component {
       <Subscribe to={[AuthStore]}>
       {auth => (
         <React.Fragment>
-          { console.log(auth.state.loggedUser) }
-          {auth.state.loggedUser.hasOwnProperty('id') ? <Redirect to={redirectTo}/> 
+          {auth.state.loggedUser.hasOwnProperty('id') ? <Redirect to={redirectTo}/>
           : <React.Fragment>
               <div>
                 <Navbar isLoggedIn={false} onLoginPage={true}/>

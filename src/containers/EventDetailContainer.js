@@ -69,7 +69,7 @@ export default class EventDetailContainer extends Component {
     const isEventFinish = moment(singleEvent.endDateTime).isBefore(moment().format())
     let action
 
-    if (LocalStore.getToken() && !isEventFinish) {
+    if (LocalStore.getUser() && LocalStore.getUser().id && !isEventFinish) {
       action = (
         <Button
           key="register"
@@ -106,12 +106,12 @@ export default class EventDetailContainer extends Component {
         <Subscribe to={[AuthStore]}>
           {auth => (
             <Navbar 
-              userName={auth.state.loggedUser.firstName ? `${auth.state.loggedUser.firstName} ${auth.state.loggedUser.lastName} ${auth.state.loggedUser.mLastName}`: ''}
+              userName={auth.state.loggedUser.name}
               onLogout={async () => {
                 await auth.logout()
                 this.props.history.push('/login')
               }}
-              isLoggedIn={!!LocalStore.getToken()}/>
+              isLoggedIn={!!auth.state.loggedUser.id}/>
           )}
         </Subscribe>
         <section>
@@ -159,7 +159,7 @@ export default class EventDetailContainer extends Component {
                       </Callout>
                     </div>
                     <div className="col-12 mt-3 pl-3 pt-3 green-top-border">
-                    {!!LocalStore.getToken() ? (
+                    {!!LocalStore.getUser() && LocalStore.getUser().id ? (
                       isCurrentUserEnrolled ? (
                         <React.Fragment>
                           <blockquote className="bp3-blockquote mb-4">

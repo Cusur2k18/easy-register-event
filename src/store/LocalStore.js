@@ -13,14 +13,6 @@ export default class LocalStore {
     return {}
   }
 
-  static setToken(token = '') {
-    localStorage.setItem('token', token)
-  }
-
-  static getToken() {
-    return localStorage.getItem('token')
-  }
-
   static setEnrollments(enrollments = []) {
     localStorage.setItem('enrollments', JSON.stringify(enrollments))
   }

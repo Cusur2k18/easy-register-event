@@ -74,12 +74,12 @@ export default class HomeContainer extends Component {
         <Subscribe to={[AuthStore]}>
           {auth => (
             <Navbar 
-              userName={auth.state.loggedUser.firstName ? `${auth.state.loggedUser.firstName} ${auth.state.loggedUser.lastName} ${auth.state.loggedUser.mLastName}`: ''}
+              userName={auth.state.loggedUser.name}
               onLogout={async () => {
                 await auth.logout()
                 this.props.history.push('login')
               }}
-              isLoggedIn={!!LocalStore.getToken()}/>
+              isLoggedIn={!!auth.state.loggedUser.id}/>
           )}
         </Subscribe>
         <Subscribe to={[EventStore]}>

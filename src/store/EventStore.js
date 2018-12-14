@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container } from 'unstated';
 import Api from '../utils/api';
-import SecureApi from '../utils/api-secure';
 import parseReq from '../utils/parseRequest';
 import { Alert } from '../components/Alert/Alert'
 import { Intent } from '@blueprintjs/core'
@@ -62,21 +61,7 @@ export default class AuthStore extends Container {
 
   getTodayEvents = () => {
     this.setTodayLoading(true)
-    const now = moment().format('YYYY-MM-DD');
-    const tomorrow = moment().add(1, 'd').format('YYYY-MM-DD');
-    const filter = JSON.stringify({
-      where: {
-        and: [
-          {
-            startDateTime: { gte: now }
-          },
-          {
-            startDateTime: { lt: tomorrow }
-          }
-        ]
-      }
-    })
-    Api.get('/events?filter=' + filter)
+    Api.get('/events', { params: { filter_type: 'today_events' }})
       .then(res => parseReq(res))
       .then(response => {
         this.setTodayLoading(false)
@@ -86,10 +71,10 @@ export default class AuthStore extends Container {
 
   }
 
-  getFilteredEvents = (params = {}) => {
-    const filter = JSON.stringify(params)
+  getFilteredEvents = (params = { type: 'all' }) => {
+    const filter = params.value ? { filter_type: params.type, value: params.value } : { filter_type: params.type }
     this.setAllLoading(true);
-    Api.get('/events?filter=' + encodeURIComponent(filter))
+    Api.get('/events', { params: filter } )
       .then(res => parseReq(res))
       .then(response => {
         this.setAllLoading(false);
@@ -99,9 +84,9 @@ export default class AuthStore extends Container {
   }
 
   getEventByUuid = uuid => {
-    const filter = JSON.stringify({ where: { uuid }, include: 'students'})
+    const filter = { filter_type: 'by_uuid', value: uuid }
     this.setSingleLoading(true)
-    Api.get('/events/findOne?filter=' + filter)
+    Api.get('/events', { params: filter })
       .then(res => parseReq(res))
       .then(response => {
         this.setSingleEvent(response.data)
@@ -125,7 +110,7 @@ export default class AuthStore extends Container {
   doEnrollment = eventId => {
     const userId = LocalStore.getUser().id
     this.setloadingAction(true);
-    SecureApi.post('/enrollments', { eventId, userId })
+    Api.post('/events/enroll', { student_id: userId, event_id: eventId }, { headers: {'Content-Type': 'application/json'} })
       .then(res => parseReq(res))
       .then(response => {
         console.log('TCL: AuthStore -> doEnrollment -> response', response);
@@ -159,7 +144,7 @@ export default class AuthStore extends Container {
       if (singleEnrollment) {
         LocalStore.setEnrollments(allEnrollments.filter(er => er.id !== singleEnrollment.id))
         this.setloadingAction(true);
-        SecureApi.delete(`/enrollments/${singleEnrollment.id}`)
+        Api.delete(`/enrollments/${singleEnrollment.id}`)
           .then(res => parseReq(res))
           .then(response => {
             console.log('TCL: AuthStore -> deleteEnrollment -> response', response);
