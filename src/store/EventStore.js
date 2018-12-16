@@ -20,7 +20,6 @@ export default class AuthStore extends Container {
     loadingAction: false
   }
 
-
   /**
    * Loadings
    * @memberOf AuthStore
@@ -40,7 +39,6 @@ export default class AuthStore extends Container {
   setloadingAction = loadingAction => {
     this.setState({ loadingAction })
   }
-
 
   /**
    * Set properties
@@ -66,7 +64,6 @@ export default class AuthStore extends Container {
       .then(response => {
         this.setTodayLoading(false)
         this.setTodayEvents(response.data)
-        console.log('TCL: AuthStore -> getTodayEvents -> response', response);
       })
 
   }
@@ -79,7 +76,6 @@ export default class AuthStore extends Container {
       .then(response => {
         this.setAllLoading(false);
         this.setFilteredEvents(response.data)
-        console.log('TCL: AuthStore -> getFilteredEvents -> response', response);
       })
   }
 
@@ -91,21 +87,31 @@ export default class AuthStore extends Container {
       .then(response => {
         if (response.error) return new Error('Error while fetching')
 
-        this.setSingleEvent(response.data[0])
+        this.setSingleEvent(response.data)
         this.setSingleLoading(false);
-        console.log('TCL: AuthStore -> getEventByUuid -> response', response);
       })
   }
 
   getEventById = id => {
-    const filter = JSON.stringify({ include: 'students'})
+    const filter = { filter_type: 'by_id', value: id }
     this.setSingleLoading(true)
-    Api.get(`/events/${id}?filter=${filter}`)
+    Api.get('/events/', { params: filter })
       .then(res => parseReq(res))
       .then(response => {
         this.setSingleEvent(response.data)
         this.setSingleLoading(false);
-        console.log('TCL: AuthStore -> getEventById -> response', response);
+      })
+  }
+
+  getAllUserEnrollments = () => {
+    const userId = LocalStore.getUser().id
+    this.setloadingAction(true);
+    Api.get('/students/enrollments', { params: { id: userId }})
+      .then(res => parseReq(res))
+      .then(response => {
+        if (response.error) return new Error('Error on the enroll')
+        LocalStore.setEnrollments([...response.data])
+        this.setloadingAction(false)
       })
   }
 
@@ -115,7 +121,7 @@ export default class AuthStore extends Container {
     Api.post('/events/enroll', { student_id: userId, event_id: eventId }, { headers: {'Content-Type': 'application/json'} })
       .then(res => parseReq(res))
       .then(response => {
-        console.log('TCL: AuthStore -> doEnrollment -> response', response);
+        if (response.error) return new Error('Error on the enroll')
         LocalStore.setEnrollments([...LocalStore.getEnrollments(), response.data])
         this.setloadingAction(false)
         swal({

@@ -62,11 +62,9 @@ export default class EventDetailContainer extends Component {
 
   render() {
     const { loadingAction, singleEvent, currentEnrollment } = this.props.actions.events.state;
-    const isCurrentUserEnrolled = !!(singleEvent.students && singleEvent.students.find(st => st.studentCode === LocalStore.getUser().studentCode))
+    const isCurrentUserEnrolled = !!(singleEvent.students && singleEvent.students.find(st => st.id === LocalStore.getUser().id))
     const isEventFinish = moment.utc(singleEvent.end_date).isBefore(moment.utc().format())
     let action
-
-    console.log('singleEvent', singleEvent)
 
     if (LocalStore.getUser() && LocalStore.getUser().id && !isEventFinish) {
       action = (

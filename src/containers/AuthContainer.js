@@ -24,7 +24,6 @@ export default class AuthContainer extends Component {
   }
 
   componentDidMount = () => {
-    console.log('ATUH ',this.props)
     const shouldRedirect = getQueryString(this.props.location.search)
     this.setState({ shouldRedirect: shouldRedirect.hasOwnProperty('redirect_detail'), uuid: shouldRedirect.redirect_detail })
   };
@@ -62,13 +61,13 @@ export default class AuthContainer extends Component {
                         <FormGroup
                           label="Codigo"
                           labelFor="code-input">
-                            <InputGroup id="code-input" placeholder="Codigo de estudiante" onChange={this.setUserCode}  />
+                            <InputGroup id="code-input" placeholder="Codigo de estudiante" onChange={this.setUserCode} autoComplete="username"  />
                         </FormGroup>
                         <FormGroup
                           label="NIP"
                           labelFor="nip-input"
                           className="mt-4">
-                            <InputGroup id="nip-input" placeholder="NIP" type="password" onChange={this.setUserNip} />
+                            <InputGroup id="nip-input" placeholder="NIP" type="password" onChange={this.setUserNip} autoComplete="current-password" />
                         </FormGroup>
                         <Button 
                           rightIcon="tick"
