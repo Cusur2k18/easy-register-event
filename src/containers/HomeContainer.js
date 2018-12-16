@@ -21,18 +21,18 @@ export default class HomeContainer extends Component {
   FILTER_OPTIONS = [
     {
       label: 'Buscar por Nombre',
-      value: 'name'
+      value: 'by_name'
     }, 
     {
       label: 'Buscar por Carrera',
-      value: 'career'
+      value: 'by_career'
     }
   ];
 
   now = new Date()
 
   state = {
-    searchCriteria: 'name'
+    searchCriteria: 'by_name'
   }
 
   onEventDetailHandler = (uuid) => {
@@ -45,14 +45,11 @@ export default class HomeContainer extends Component {
   }
 
   handleSearch = (e) => {
-    console.log('TCL: HomeContainer -> handleSearch -> e.currentTarget.value', e.currentTarget.value);
     const filter = this.getFilter(e.currentTarget.value)
-    console.log('TCL: HomeContainer -> handleSearch -> filter', filter);
     this.props.actions.events.getFilteredEvents(filter)
   }
   
   onHandleCriteriaSearch = (e) => {
-    console.log('TCL: HomeContainer -> onHandleCriteriaSearch -> e', e.currentTarget.value);
     this.setState({ searchCriteria: e.currentTarget.value })    
   }
 
@@ -60,12 +57,13 @@ export default class HomeContainer extends Component {
     const { searchCriteria } = this.state
     if (nameFilter) {
       return {
-        where: {
-          [searchCriteria]: { like: '%'+ nameFilter +'%' }
-        }
+        type: searchCriteria,
+        value: nameFilter
       }
     }
-    return {}
+    return {
+      type: 'all'
+    }
   }
 
   render() {
