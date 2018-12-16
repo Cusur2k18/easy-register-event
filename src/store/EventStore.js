@@ -89,7 +89,9 @@ export default class AuthStore extends Container {
     Api.get('/events', { params: filter })
       .then(res => parseReq(res))
       .then(response => {
-        this.setSingleEvent(response.data)
+        if (response.error) return new Error('Error while fetching')
+
+        this.setSingleEvent(response.data[0])
         this.setSingleLoading(false);
         console.log('TCL: AuthStore -> getEventByUuid -> response', response);
       })

@@ -13,14 +13,14 @@ import {
   Tag,
   Intent,
   NonIdealState
-} from "@blueprintjs/core";
-import html2canvas from 'html2canvas';
-import LocalStore from '../store/LocalStore';
-import { Subscribe } from 'unstated';
+} from "@blueprintjs/core"
+import html2canvas from 'html2canvas'
+import LocalStore from '../store/LocalStore'
+import { Subscribe } from 'unstated'
 import AuthStore from '../store/AuthStore'
 import * as jsPDF from 'jspdf'
 import * as moment from 'moment'
-import RCTMarkdown from 'react-markdown';
+import transformImage from '../utils/transformImage'
 
 export default class EventDetailContainer extends Component {
 
@@ -28,13 +28,10 @@ export default class EventDetailContainer extends Component {
     downloadLoading: false
   }
 
-  
   componentDidMount() {
-    console.log(this.props)
     this.props.actions.events.getEventByUuid(this.props.match.params.id)
   }
   
-
   printQRCode = () => {
     this.setState({ downloadLoading: true })
     const input = document.getElementById('ticket')
@@ -66,8 +63,10 @@ export default class EventDetailContainer extends Component {
   render() {
     const { loadingAction, singleEvent, currentEnrollment } = this.props.actions.events.state;
     const isCurrentUserEnrolled = !!(singleEvent.students && singleEvent.students.find(st => st.studentCode === LocalStore.getUser().studentCode))
-    const isEventFinish = moment(singleEvent.endDateTime).isBefore(moment().format())
+    const isEventFinish = moment.utc(singleEvent.end_date).isBefore(moment.utc().format())
     let action
+
+    console.log('singleEvent', singleEvent)
 
     if (LocalStore.getUser() && LocalStore.getUser().id && !isEventFinish) {
       action = (
@@ -123,14 +122,14 @@ export default class EventDetailContainer extends Component {
                   <Divider />
                   <div className="row">
                     <div className="col-12 mt-3" width="100%">
-                      <img src={singleEvent.coverImg ? singleEvent.coverImg : 'https://via.placeholder.com/350x80' } alt={singleEvent.name} className="img-fluid border-green cover-img" width="100%"/>
+                      <img src={singleEvent.cover ? transformImage(singleEvent.cover, ['w_1000', 'h_250']) : 'https://via.placeholder.com/350x80' } alt={singleEvent.name} className="img-fluid border-green cover-img" width="100%"/>
                     </div>
                     <div className="col-12 col-md-8 pt-3 pl-3">
                       <blockquote className="bp3-blockquote">
                         <span className="font-weight-bold">DATOS DEL EVENTO:</span>
                       </blockquote>
                       <div className="mt-4 mt-md-5">
-                        <RCTMarkdown source={singleEvent.description} />
+                        <div dangerouslySetInnerHTML={{__html: singleEvent.description}}></div>
                       </div>
                       <div className="mt-4 mt-md-5">
                         <Divider />
@@ -144,15 +143,15 @@ export default class EventDetailContainer extends Component {
                       <Callout title="" className="mt-3 mt-md-5">
                         <ul className="list-group list-group-flush">
                           <li className="list-group-item font-weight-bold">Fecha de Inicio:</li>
-                          <li className="list-group-item">{moment(singleEvent.startDateTime).format('dddd DD MMM YYYY hh:mm a')}</li>
+                          <li className="list-group-item">{moment.utc(singleEvent.start_date).format('dddd DD MMM YYYY hh:mm a')}</li>
                           <li className="list-group-item font-weight-bold">Fecha de Finalizacion:</li>
-                          <li className="list-group-item">{moment(singleEvent.endDateTime).format('dddd DD MMM YYYY hh:mm a')}</li>
+                          <li className="list-group-item">{moment.utc(singleEvent.end_date).format('dddd DD MMM YYYY hh:mm a')}</li>
                           <li className="list-group-item font-weight-bold">Personas registradas al evento:</li>
                           <li className="list-group-item">
                             <Tag
                               intent={Intent.SUCCESS}
                               round>
-                              {singleEvent.students && singleEvent.students.length}
+                              {(singleEvent.students && singleEvent.students.length) || 0}
                             </Tag>
                           </li>
                         </ul>
