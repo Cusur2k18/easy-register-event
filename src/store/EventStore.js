@@ -53,7 +53,10 @@ export default class AuthStore extends Container {
   }
 
   setSingleEvent = singleEvent => {
-    const currentEnrollment = LocalStore.getEnrollments().find(er => er.eventId === singleEvent.id)
+    let currentEnrollment = LocalStore.getEnrollments().find(er => er.event_id === singleEvent.id)
+    if (!currentEnrollment) {
+      currentEnrollment = {}
+    }
     this.setState({ singleEvent, currentEnrollment })
   }
 
@@ -148,11 +151,11 @@ export default class AuthStore extends Container {
      if (result.value) {
       const { singleEvent } = this.state;
       const allEnrollments = LocalStore.getEnrollments()
-      const singleEnrollment = allEnrollments.find( e => e.eventId === singleEvent.id )
+      const singleEnrollment = allEnrollments.find( e => e.event_id === singleEvent.id )
       if (singleEnrollment) {
         LocalStore.setEnrollments(allEnrollments.filter(er => er.id !== singleEnrollment.id))
         this.setloadingAction(true);
-        Api.delete(`/enrollments/${singleEnrollment.id}`)
+        Api.delete(`/events/rescind`,  { params: {event_id: singleEvent.id, enroll_id: singleEnrollment.id} }, { headers: {'Content-Type': 'application/json'} })
           .then(res => parseReq(res))
           .then(response => {
             console.log('TCL: AuthStore -> deleteEnrollment -> response', response);

@@ -63,7 +63,7 @@ export default class EventDetailContainer extends Component {
   render() {
     const { loadingAction, singleEvent, currentEnrollment } = this.props.actions.events.state;
     const isCurrentUserEnrolled = !!(singleEvent.students && singleEvent.students.find(st => st.id === LocalStore.getUser().id))
-    const isEventFinish = moment.utc(singleEvent.end_date).isBefore(moment.utc().format())
+    const isEventFinish = moment(new Date().toISOString()).isBetween(singleEvent.start_date, singleEvent.end_date, 'hour', '[]')
     let action
 
     if (LocalStore.getUser() && LocalStore.getUser().id && !isEventFinish) {
@@ -95,7 +95,7 @@ export default class EventDetailContainer extends Component {
           className="bp3-intent-success mt-3 mt-md-0" />)
     }
     if (isEventFinish && !isCurrentUserEnrolled) {
-      action = <h4 className="text-muted text-uppercase">El evento ya termino</h4>
+      action = <h4 className="text-muted text-uppercase">Ya no se permiten registros</h4>
     }
 
     return (

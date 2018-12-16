@@ -45,13 +45,28 @@
 }
 
 #ticket {
-  background: #6a9566;
+  background: transparent;
   color: white;
+  border-radius: 10px;
+  border: 1px solid #2e3638;
+  overflow: hidden;
 }
 
+#ticket .dashed-border {
+  background: #2e3638;
+  line-height: 15px;
+  margin: -10px;
+}
+#ticket .qr-container {
+  background: #e2dbca;
+  margin: -10px;
+}
+
+
 #ticket ul li {
-  background: #6a9566;
-  font-weight: bold;
+  background: transparent;
+  /*font-weight: bold;*/
+  font-size: 11px;
 }
 
 @keyframes App-logo-spin {
