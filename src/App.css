@@ -6,6 +6,32 @@
   position: absolute;
   bottom: 0;
   width: 100%;
+  color: #2e3638;
+  font-size: 0.8em;
+  text-align: center;
+  background: linear-gradient(360deg, #efefef, #dfe1e2);
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.37);
+}
+
+.footer ul {
+  list-style: none;
+  margin-bottom: 0;
+}
+
+.footer ul li {
+  padding: 3px 0;
+}
+
+.footer .footer-left {
+  width: 49%;
+  text-align: left;
+  display: inline-block;
+}
+
+.footer .footer-right {
+  width: 49%;
+  text-align: right;
+  display: inline-block;
 }
 
 .App-header {
@@ -57,9 +83,9 @@
   line-height: 15px;
   margin: -10px;
 }
+
 #ticket .qr-container {
-  background: #e2dbca;
-  margin: -10px;
+  padding-left: 14px;
 }
 
 

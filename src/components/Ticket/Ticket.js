@@ -36,7 +36,7 @@ function Ticket(props) {
             <li className="list-group-item">Asistente: {props.user.name}</li>
           </ul>
         </div>
-        <div className="col-4 text-center">
+        <div className="col-4 text-center qr-container">
           <QRCode value={JSON.stringify(qrData)}
             size={180}
             bgColor={"#ffffff"}
