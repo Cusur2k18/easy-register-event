@@ -1,4 +1,4 @@
-export default request => {;
+export default request => {
   switch (request.status) {
     case 200: 
       return {
