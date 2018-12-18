@@ -1,11 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-
 import LogoCTA from '../../assets/logocta.png'
-
-const propTypes = {
-  
-}
 
 function Footer(props) {
   return (
@@ -29,7 +23,5 @@ function Footer(props) {
     </div>
   )
 }
-
-Footer.propTypes = propTypes
 
 export default Footer

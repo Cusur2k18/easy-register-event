@@ -1,12 +1,8 @@
-import React from 'react';
-import { Container } from 'unstated';
-import Api from '../utils/api';
-import parseReq from '../utils/parseRequest';
-import { Alert } from '../components/Alert/Alert'
-import { Intent } from '@blueprintjs/core'
+import { Container } from 'unstated'
+import Api from '../utils/api'
+import parseReq from '../utils/parseRequest'
 import LocalStore from './LocalStore'
 import swal from 'sweetalert2'
-import * as moment from 'moment'
 
 export default class AuthStore extends Container {
   state = {
@@ -73,11 +69,11 @@ export default class AuthStore extends Container {
 
   getFilteredEvents = (params = { type: 'all' }) => {
     const filter = params.value ? { filter_type: params.type, value: params.value } : { filter_type: params.type }
-    this.setAllLoading(true);
+    this.setAllLoading(true)
     Api.get('/events', { params: filter } )
       .then(res => parseReq(res))
       .then(response => {
-        this.setAllLoading(false);
+        this.setAllLoading(false)
         this.setFilteredEvents(response.data)
       })
   }
@@ -91,7 +87,7 @@ export default class AuthStore extends Container {
         if (response.error) return new Error('Error while fetching')
 
         this.setSingleEvent(response.data)
-        this.setSingleLoading(false);
+        this.setSingleLoading(false)
       })
   }
 
@@ -102,13 +98,13 @@ export default class AuthStore extends Container {
       .then(res => parseReq(res))
       .then(response => {
         this.setSingleEvent(response.data)
-        this.setSingleLoading(false);
+        this.setSingleLoading(false)
       })
   }
 
   getAllUserEnrollments = () => {
     const userId = LocalStore.getUser().id
-    this.setloadingAction(true);
+    this.setloadingAction(true)
     Api.get('/students/enrollments', { params: { id: userId }})
       .then(res => parseReq(res))
       .then(response => {
@@ -120,7 +116,7 @@ export default class AuthStore extends Container {
 
   doEnrollment = eventId => {
     const userId = LocalStore.getUser().id
-    this.setloadingAction(true);
+    this.setloadingAction(true)
     Api.post('/events/enroll', { student_id: userId, event_id: eventId }, { headers: {'Content-Type': 'application/json'} })
       .then(res => parseReq(res))
       .then(response => {
@@ -149,17 +145,17 @@ export default class AuthStore extends Container {
       cancelButtonText:'No! no borres mi registro'
     }).then((result) => {
      if (result.value) {
-      const { singleEvent } = this.state;
+      const { singleEvent } = this.state
       const allEnrollments = LocalStore.getEnrollments()
       const singleEnrollment = allEnrollments.find( e => e.event_id === singleEvent.id )
       if (singleEnrollment) {
         LocalStore.setEnrollments(allEnrollments.filter(er => er.id !== singleEnrollment.id))
-        this.setloadingAction(true);
+        this.setloadingAction(true)
         Api.delete(`/events/rescind`,  { params: {event_id: singleEvent.id, enroll_id: singleEnrollment.id} }, { headers: {'Content-Type': 'application/json'} })
           .then(res => parseReq(res))
           .then(response => {
-            console.log('TCL: AuthStore -> deleteEnrollment -> response', response);
-            this.setloadingAction(false);
+            console.log('TCL: AuthStore -> deleteEnrollment -> response', response)
+            this.setloadingAction(false)
             swal({
               title: 'Listo!',
               text: 'Tu registro se borro!',

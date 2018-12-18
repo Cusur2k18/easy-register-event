@@ -1,12 +1,9 @@
-import React from 'react'
 import { Container } from 'unstated'
 import Api from '../utils/api'
 import parseReq from '../utils/parseRequest'
 import { Alert } from '../components/Alert/Alert'
 import { Intent } from '@blueprintjs/core'
 import LocalStore from './LocalStore'
-import * as Qs from 'qs'
-
 
 export default class AuthStore extends Container {
   state = {

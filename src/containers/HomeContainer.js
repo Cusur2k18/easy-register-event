@@ -14,7 +14,6 @@ import {
 import { Subscribe } from 'unstated';
 import AuthStore from '../store/AuthStore'
 import EventStore from '../store/EventStore'
-import LocalStore from '../store/LocalStore'
 
 export default class HomeContainer extends Component {
 
