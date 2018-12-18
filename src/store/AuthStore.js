@@ -1,7 +1,7 @@
-import React from 'react';
-import { Container } from 'unstated';
-import Api from '../utils/api';
-import parseReq from '../utils/parseRequest';
+import React from 'react'
+import { Container } from 'unstated'
+import Api from '../utils/api'
+import parseReq from '../utils/parseRequest'
 import { Alert } from '../components/Alert/Alert'
 import { Intent } from '@blueprintjs/core'
 import LocalStore from './LocalStore'
@@ -13,10 +13,10 @@ export default class AuthStore extends Container {
     loggedUser: LocalStore.getUser(),
     loginLoading: false,
     toLogout: false
-  };
+  }
 
   setUser = user => {
-    this.setState({ loggedUser: user });
+    this.setState({ loggedUser: user })
   }
   
   setLoading = loading => {
@@ -28,7 +28,6 @@ export default class AuthStore extends Container {
     Api.post('/students/login', JSON.stringify({ studentCode, nip}), { headers: {'Content-Type': 'application/json'} })
       .then(res => parseReq(res))
       .then(response => {
-        console.log('TCL: AuthStore -> login -> response', response);
         if (response.data.error) {
           this.setLoading(false)
           Alert.show({ message: response.data.error, intent: Intent.DANGER, icon: 'warning-sign' })
@@ -41,7 +40,7 @@ export default class AuthStore extends Container {
         this.setLoading(false)
       })
       .catch(err => {
-        const error = parseReq({ err });
+        const error = parseReq({ err })
         this.setLoading(false)
         Alert.show({ message: error.error, intent: Intent.DANGER, icon: 'warning-sign' })
       })
