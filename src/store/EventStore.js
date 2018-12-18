@@ -94,7 +94,7 @@ export default class AuthStore extends Container {
   getEventById = id => {
     const filter = { filter_type: 'by_id', value: id }
     this.setSingleLoading(true)
-    Api.get('/events/', { params: filter })
+    Api.get('/events', { params: filter })
       .then(res => parseReq(res))
       .then(response => {
         this.setSingleEvent(response.data)
@@ -108,7 +108,7 @@ export default class AuthStore extends Container {
     Api.get('/students/enrollments', { params: { id: userId }})
       .then(res => parseReq(res))
       .then(response => {
-        if (response.error) return new Error('Error on the enroll')
+        if (response.error || response.data.error) return console.error('Error on the enroll')
         LocalStore.setEnrollments([...response.data])
         this.setloadingAction(false)
       })
@@ -154,7 +154,6 @@ export default class AuthStore extends Container {
         Api.delete(`/events/rescind`,  { params: {event_id: singleEvent.id, enroll_id: singleEnrollment.id} }, { headers: {'Content-Type': 'application/json'} })
           .then(res => parseReq(res))
           .then(response => {
-            console.log('TCL: AuthStore -> deleteEnrollment -> response', response)
             this.setloadingAction(false)
             swal({
               title: 'Listo!',

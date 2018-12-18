@@ -63,10 +63,11 @@ export default class EventDetailContainer extends Component {
   render() {
     const { loadingAction, singleEvent, currentEnrollment } = this.props.actions.events.state;
     const isCurrentUserEnrolled = !!(singleEvent.students && singleEvent.students.find(st => st.id === LocalStore.getUser().id))
-    const isEventFinish = moment(new Date().toISOString()).isBetween(singleEvent.start_date, singleEvent.end_date, 'hour', '[]')
+    const isEventAvailableRegister = (moment(new Date().toISOString()).isBefore(singleEvent.start_date) && singleEvent.open_to_enroll)
+    const isEventFinish = moment(singleEvent.end_date).isBefore(moment(new Date().toISOString()))
     let action
-
-    if (LocalStore.getUser() && LocalStore.getUser().id && !isEventFinish) {
+    
+    if (LocalStore.getUser().id && isEventAvailableRegister) {
       action = (
         <Button
           key="register"
@@ -94,8 +95,17 @@ export default class EventDetailContainer extends Component {
           text="Imprimir constancia"
           className="bp3-intent-success mt-3 mt-md-0" />)
     }
-    if (isEventFinish && !isCurrentUserEnrolled) {
+    if (!isEventAvailableRegister && !isCurrentUserEnrolled) {
       action = <h4 className="text-muted text-uppercase">Ya no se permiten registros</h4>
+    }
+
+    if (!isEventFinish 
+        && !isCurrentUserEnrolled
+        && singleEvent.students 
+        && singleEvent.students.length 
+        && singleEvent.available_spots > 0 
+        && singleEvent.students.length === singleEvent.available_spots) {
+      action = <h4 className="text-muted text-uppercase">Evento sin cupo</h4>
     }
 
     return (
@@ -113,7 +123,7 @@ export default class EventDetailContainer extends Component {
         </Subscribe>
         <section>
           <div className="container">
-            <div className="row">
+            <div className="">
               <div className="col-12 my-5">
                 <Card elevation={Elevation.THREE}>
                   <h5>{singleEvent.name}</h5>
@@ -150,6 +160,7 @@ export default class EventDetailContainer extends Component {
                               intent={Intent.SUCCESS}
                               round>
                               {(singleEvent.students && singleEvent.students.length) || 0}
+                              {singleEvent.available_spots > 0 && (<span> / {singleEvent.available_spots} </span>)}
                             </Tag>
                           </li>
                         </ul>

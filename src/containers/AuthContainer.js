@@ -28,7 +28,6 @@ export default class AuthContainer extends Component {
     this.setState({ shouldRedirect: shouldRedirect.hasOwnProperty('redirect_detail'), uuid: shouldRedirect.redirect_detail })
   };
   
-
   setUserCode = e => {
     this.setState({ userCode: e.target.value })
   }
