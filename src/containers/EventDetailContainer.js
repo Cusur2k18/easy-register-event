@@ -25,7 +25,8 @@ import transformImage from '../utils/transformImage'
 export default class EventDetailContainer extends Component {
 
   state = {
-    downloadLoading: false
+    downloadLoading: false,
+    vpwidth: window.innerWidth
   }
 
   componentDidMount() {
@@ -39,7 +40,8 @@ export default class EventDetailContainer extends Component {
       .then((canvas) => {
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF();
-        pdf.addImage(imgData, 'JPEG', 30, 10, 150, 50);
+        const pdfImageHeight = this.state.vpwidth > 600 ? 50 : 250;
+        pdf.addImage(imgData, 'JPEG', 30, 10, 150, pdfImageHeight);
         pdf.save("download.pdf");
         this.setState({ downloadLoading: false })
       })
