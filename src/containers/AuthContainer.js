@@ -53,7 +53,7 @@ export default class AuthContainer extends Component {
                     <Card elevation={Elevation.TWO}>
                       <h5 className="text-uppercase">Inicia Sesion</h5>
                       <Divider />
-                      <form className="p-5" onSubmit={(e) => {
+                      <form className="p-1 p-md-5" onSubmit={(e) => {
                         e.preventDefault();
                         auth.login(this.state.userCode, this.state.nip)
                       }}>

@@ -5,6 +5,7 @@ import { Carousel } from 'react-responsive-carousel';
 import { Divider } from "@blueprintjs/core";
 import * as moment from 'moment';
 import transformImage from '../../utils/transformImage'
+import defaulttImage from '../../assets/no-image.png'
 
 const propTypes = {
   onEventDetail: PropTypes.func,
@@ -25,7 +26,7 @@ function TodayEvents(props) {
           events.map( event => {
             return (
               <div key={event.id} className="clickable" onClick={() => {props.onEventDetail(event.uuid)}}>
-                <img src={event.cover ? transformImage(event.cover, ['w_650', 'h_450']) : 'https://via.placeholder.com/350x150'} className="today-image" alt="Powered by" />
+                <img src={event.cover ? transformImage(event.cover, ['w_650', 'h_450']) : defaulttImage} className="today-image" alt="Powered by" />
                 <div className="legend">
                   <h5>{event.name}</h5>
                   <Divider />

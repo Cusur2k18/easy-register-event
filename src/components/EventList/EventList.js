@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { NonIdealState, Divider } from '@blueprintjs/core'
 import * as moment from 'moment'
 import transformImage from '../../utils/transformImage'
+import defaulttImage from '../../assets/no-image.png'
 
 const propTypes = {
   events: PropTypes.array,
@@ -29,7 +30,7 @@ function EventList(props) {
         <React.Fragment key={singleEvent.id}>
           <div className="col-12 col-md-4 mt-4">
             <div className="card clickable" onClick={() => {props.onEventDetail(singleEvent.uuid)}}>
-              <img className="card-img-top" src={singleEvent.cover ? transformImage(singleEvent.cover, ['w_150', 'h_150']) : 'https://via.placeholder.com/150x150'} alt="Card" />
+              <img className="card-img-top" src={singleEvent.cover ? transformImage(singleEvent.cover, ['w_150', 'h_150']) : defaulttImage} alt="Card" />
               <div className="card-body">
                 <h5 className="card-title">{singleEvent.name}</h5>
                 <Divider />

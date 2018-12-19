@@ -123,8 +123,8 @@ export default class EventDetailContainer extends Component {
         </Subscribe>
         <section>
           <div className="container">
-            <div className="">
-              <div className="col-12 my-5">
+            <div className="card-container">
+              <div className="col-12 my-5 p-0">
                 <Card elevation={Elevation.THREE}>
                   <h5>{singleEvent.name}</h5>
                   <Divider />

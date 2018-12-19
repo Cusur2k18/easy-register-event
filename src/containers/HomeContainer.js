@@ -31,16 +31,26 @@ export default class HomeContainer extends Component {
   now = new Date()
 
   state = {
-    searchCriteria: 'by_name'
+    searchCriteria: 'by_name',
+    vpwidth: window.innerWidth
   }
 
   onEventDetailHandler = (uuid) => {
     this.props.history.push(`event/${uuid}`)
   }
 
+  onResizeWindow = () => {
+    this.setState({ vpwidth: window.innerWidth })
+  }
+
   componentDidMount = () => {
     this.props.actions.events.getTodayEvents()
     this.props.actions.events.getFilteredEvents()
+    window.addEventListener('resize', this.onResizeWindow)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResizeWindow)
   }
 
   handleSearch = (e) => {
@@ -82,7 +92,7 @@ export default class HomeContainer extends Component {
         <Subscribe to={[EventStore]}>
         {events => (
           <React.Fragment>
-            <section>
+            <section className="bg-white">
               <div className="container-fluid p-2 px-md-5 py-md-2">
               <h2>Eventos para hoy <small className="text-muted">{this.now.toLocaleDateString()}</small></h2>
               <Divider />
@@ -111,8 +121,8 @@ export default class HomeContainer extends Component {
               <div className="container">
                 <h2>Buscar eventos</h2>
                 <Divider />
-                <div className="col-12 d-flex pt-3">
-                  <ControlGroup vertical={false}>
+                <div className="col-12 d-flex justify-content-center justify-content-md-start pt-3">
+                  <ControlGroup vertical={this.state.vpwidth < 720}>
                     <HTMLSelect options={this.FILTER_OPTIONS} onChange={this.onHandleCriteriaSearch} />
                     <InputGroup placeholder="Buscar eventos..." onChange={this.handleSearch} />
                     <Button icon="arrow-right" />

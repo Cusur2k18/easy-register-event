@@ -22,9 +22,9 @@ function Ticket(props) {
   }
 
   return (
-    <div id="ticket" className="col-12 col-md-6 pt-1 mr-1">
+    <div id="ticket" className="col-12 col-md-7 pt-1 mr-1">
       <div className="row">
-        <div className="col-8 dashed-border">
+        <div className="col-12 col-md-8 order-last order-md-first dashed-border">
           <ul className="list-group list-group-flush pt-3">
             <li className="list-group-item">Nombre del evento: {props.event.name}</li>
             <li className="list-group-item">
@@ -36,7 +36,7 @@ function Ticket(props) {
             <li className="list-group-item">Asistente: {props.user.name}</li>
           </ul>
         </div>
-        <div className="col-4 text-center qr-container">
+        <div className="col-12 col-md-4 text-center qr-container">
           <QRCode value={JSON.stringify(qrData)}
             size={180}
             bgColor={"#ffffff"}

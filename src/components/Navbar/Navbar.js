@@ -34,7 +34,6 @@ function NavbarComponent(props) {
       <React.Fragment>
         <NavbarHeading>{props.userName}</NavbarHeading>
         <NavbarDivider />
-        <Button className={Classes.MINIMAL} icon="user" text="Mi perfil" />
         <Button className={Classes.MINIMAL} icon="log-out" text="Salir" onClick={props.onLogout} />
       </React.Fragment>
     )

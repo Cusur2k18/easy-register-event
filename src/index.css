@@ -18,7 +18,9 @@ body {
   display: block;
   position: relative;
   padding-bottom: 110px; /* height of your footer */
+  background: #F2F2F2;
 }
+
 
 .clickable:hover {
   cursor: pointer;
@@ -40,4 +42,14 @@ body {
 .black-background {
   background: #3D3D3B;
   color: white;
+}
+
+@media screen and (max-width: 720px) {
+  #root {
+    padding-bottom: 190px; /* height of your footer */
+  }
+
+  .card-container {
+    margin-top: 5rem;
+  }
 }
