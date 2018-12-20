@@ -58,7 +58,7 @@ export default class AuthStore extends Container {
 
   getTodayEvents = () => {
     this.setTodayLoading(true)
-    Api.get('/events', { params: { filter_type: 'today_events' }})
+    Api.get('/events', { params: { filter_type: 'today_events', per_page: 5 }})
       .then(res => parseReq(res))
       .then(response => {
         this.setTodayLoading(false)

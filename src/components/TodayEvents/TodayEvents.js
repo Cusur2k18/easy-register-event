@@ -26,7 +26,7 @@ function TodayEvents(props) {
           events.map( event => {
             return (
               <div key={event.id} className="clickable" onClick={() => {props.onEventDetail(event.uuid)}}>
-                <img src={event.cover ? transformImage(event.cover, ['w_650', 'h_450']) : defaulttImage} className="today-image" alt="Powered by" />
+                <img src={event.cover ? transformImage(event.cover, ['w_650', 'h_450']) : defaulttImage} className="today-image" alt={event.name} />
                 <div className="legend">
                   <h5>{event.name}</h5>
                   <Divider />
