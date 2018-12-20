@@ -32,7 +32,9 @@ export default class HomeContainer extends Component {
 
   state = {
     searchCriteria: 'by_name',
-    vpwidth: window.innerWidth
+    vpwidth: window.innerWidth,
+    currentPage: 1,
+    totalPages: 10
   }
 
   onEventDetailHandler = (uuid) => {
@@ -60,6 +62,20 @@ export default class HomeContainer extends Component {
   
   onHandleCriteriaSearch = (e) => {
     this.setState({ searchCriteria: e.currentTarget.value })    
+  }
+
+  handlePagination = (currentPage, totalPages, actionType) => {
+    let nextPage
+    if (actionType === 'next' && currentPage + 1 <= totalPages) {
+      nextPage = currentPage + 1
+    }
+    if (actionType === 'prev' && currentPage - 1 >= 1) {
+      nextPage = currentPage - 1
+    }
+    if (!nextPage) {
+      nextPage = actionType === 'next' ? totalPages : 1
+    }
+    this.setState({ currentPage: nextPage })
   }
 
   getFilter = (nameFilter) => {
@@ -132,7 +148,10 @@ export default class HomeContainer extends Component {
                   {events.state.filteredEvents.length ? (
                     <EventList 
                     events={events.state.filteredEvents}
-                    onEventDetail={this.onEventDetailHandler}/>
+                    onEventDetail={this.onEventDetailHandler}
+                    onPaginate={this.handlePagination}
+                    currentPage={this.state.currentPage}
+                    totalPages={this.state.totalPages}/>
                   ):
                   (<NonIdealState
                     icon="error"

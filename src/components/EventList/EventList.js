@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { NonIdealState, Divider } from '@blueprintjs/core'
 import * as moment from 'moment'
+import Pagination from '../Pagination/Pagination'
 import transformImage from '../../utils/transformImage'
 import defaulttImage from '../../assets/no-image.png'
 
@@ -49,7 +50,17 @@ function EventList(props) {
   }
   return (
     <React.Fragment>
+      <div className="col-12 text-center mt-4 text-md-right">
+        <div className="col">
+          <Pagination onNext={props.onPaginate} onPrev={props.onPaginate} currentPage={props.currentPage} totalPages={props.totalPages}/>
+        </div>
+      </div>
       {content}
+      <div className="col-12 text-center mt-4 text-md-right">
+        <div className="col">
+          <Pagination onNext={props.onPaginate} onPrev={props.onPaginate} currentPage={props.currentPage} totalPages={props.totalPages}/>
+        </div>
+      </div>
     </React.Fragment>
   )
 }
