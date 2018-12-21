@@ -12,7 +12,7 @@ const propTypes = {
 
 function Pagination (props) {
   return (
-     props.totalPages > 0 ? (
+     props.totalPages > 1 ? (
        <React.Fragment>
         <span className="text-muted mr-2">Pagina {props.currentPage} de {props.totalPages}</span>
         <ButtonGroup>
