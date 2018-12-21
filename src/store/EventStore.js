@@ -1,6 +1,6 @@
 import { Container } from 'unstated'
 import Api from '../utils/api'
-import parseReq from '../utils/parseRequest'
+import parseRes from '../utils/parseResponse'
 import LocalStore from './LocalStore'
 import swal from 'sweetalert2'
 
@@ -10,6 +10,9 @@ export default class AuthStore extends Container {
     todayEvents: [],
     singleEvent: {},
     currentEnrollment: {},
+    totalEvents: 0,
+    eventsPerPage: 10,
+    currentPage: 1,
     loadingAllEvents: false,
     loadingTodayEvents: false,
     loadingSingle: false,
@@ -36,6 +39,10 @@ export default class AuthStore extends Container {
     this.setState({ loadingAction })
   }
 
+  setPaginationInfo = headers => {
+    this.setState({ totalEvents: parseInt(headers.total, 10), eventsPerPage: parseInt(headers.perPage, 10), currentPage: parseInt(headers.currentPage, 10) })
+  }
+
   /**
    * Set properties
    * @memberOf AuthStore
@@ -59,7 +66,7 @@ export default class AuthStore extends Container {
   getTodayEvents = () => {
     this.setTodayLoading(true)
     Api.get('/events', { params: { filter_type: 'today_events', per_page: 5 }})
-      .then(res => parseReq(res))
+      .then(res => parseRes(res))
       .then(response => {
         this.setTodayLoading(false)
         this.setTodayEvents(response.data)
@@ -68,13 +75,15 @@ export default class AuthStore extends Container {
   }
 
   getFilteredEvents = (params = { type: 'all' }) => {
-    const filter = params.value ? { filter_type: params.type, value: params.value } : { filter_type: params.type }
+    let filter = params.value ? { filter_type: params.type, value: params.value } : { filter_type: params.type }
+    filter = params.page ? { ...filter, page: params.page } : filter
     this.setAllLoading(true)
     Api.get('/events', { params: filter } )
-      .then(res => parseReq(res))
+      .then(res => parseRes(res))
       .then(response => {
         this.setAllLoading(false)
         this.setFilteredEvents(response.data)
+        this.setPaginationInfo(response.meta)
       })
   }
 
@@ -82,7 +91,7 @@ export default class AuthStore extends Container {
     const filter = { filter_type: 'by_uuid', value: uuid }
     this.setSingleLoading(true)
     Api.get('/events', { params: filter })
-      .then(res => parseReq(res))
+      .then(res => parseRes(res))
       .then(response => {
         if (response.error) return new Error('Error while fetching')
 
@@ -95,7 +104,7 @@ export default class AuthStore extends Container {
     const filter = { filter_type: 'by_id', value: id }
     this.setSingleLoading(true)
     Api.get('/events', { params: filter })
-      .then(res => parseReq(res))
+      .then(res => parseRes(res))
       .then(response => {
         this.setSingleEvent(response.data)
         this.setSingleLoading(false)
@@ -106,7 +115,7 @@ export default class AuthStore extends Container {
     const userId = LocalStore.getUser().id
     this.setloadingAction(true)
     Api.get('/students/enrollments', { params: { id: userId }})
-      .then(res => parseReq(res))
+      .then(res => parseRes(res))
       .then(response => {
         if (response.error || response.data.error) return console.error('Error on the enroll')
         LocalStore.setEnrollments([...response.data])
@@ -118,7 +127,7 @@ export default class AuthStore extends Container {
     const userId = LocalStore.getUser().id
     this.setloadingAction(true)
     Api.post('/events/enroll', { student_id: userId, event_id: eventId }, { headers: {'Content-Type': 'application/json'} })
-      .then(res => parseReq(res))
+      .then(res => parseRes(res))
       .then(response => {
         if (response.error) return new Error('Error on the enroll')
         LocalStore.setEnrollments([...LocalStore.getEnrollments(), response.data])
@@ -152,7 +161,7 @@ export default class AuthStore extends Container {
         LocalStore.setEnrollments(allEnrollments.filter(er => er.id !== singleEnrollment.id))
         this.setloadingAction(true)
         Api.delete(`/events/rescind`,  { params: {event_id: singleEvent.id, enroll_id: singleEnrollment.id} }, { headers: {'Content-Type': 'application/json'} })
-          .then(res => parseReq(res))
+          .then(res => parseRes(res))
           .then(response => {
             this.setloadingAction(false)
             swal({

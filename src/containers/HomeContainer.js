@@ -30,11 +30,14 @@ export default class HomeContainer extends Component {
 
   now = new Date()
 
-  state = {
-    searchCriteria: 'by_name',
-    vpwidth: window.innerWidth,
-    currentPage: 1,
-    totalPages: 10
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      searchCriteria: 'by_name',
+      searchString: '',
+      vpwidth: window.innerWidth
+    }
   }
 
   onEventDetailHandler = (uuid) => {
@@ -56,7 +59,7 @@ export default class HomeContainer extends Component {
   }
 
   handleSearch = (e) => {
-    const filter = this.getFilter(e.currentTarget.value)
+    const filter = this.getSearchFilter(e.currentTarget.value)
     this.props.actions.events.getFilteredEvents(filter)
   }
   
@@ -75,20 +78,29 @@ export default class HomeContainer extends Component {
     if (!nextPage) {
       nextPage = actionType === 'next' ? totalPages : 1
     }
+    let filters = this.getPriorFilters()
+
     this.setState({ currentPage: nextPage })
+    this.props.actions.events.getFilteredEvents({...filters, page: nextPage })
   }
 
-  getFilter = (nameFilter) => {
+  getSearchFilter = (searchString) => {
     const { searchCriteria } = this.state
-    if (nameFilter) {
+    if (searchString) {
+      this.setState({ searchString })
       return {
         type: searchCriteria,
-        value: nameFilter
+        value: searchString
       }
     }
     return {
       type: 'all'
     }
+  }
+
+  getPriorFilters = () => {
+    const { searchCriteria, searchString } = this.state
+    return searchString ? { type: searchCriteria, value: searchString } : { type: 'all' }
   }
 
   render() {
@@ -150,8 +162,8 @@ export default class HomeContainer extends Component {
                     events={events.state.filteredEvents}
                     onEventDetail={this.onEventDetailHandler}
                     onPaginate={this.handlePagination}
-                    currentPage={this.state.currentPage}
-                    totalPages={this.state.totalPages}/>
+                    currentPage={events.state.currentPage}
+                    totalPages={Math.ceil(events.state.totalEvents / events.state.eventsPerPage)}/>
                   ):
                   (<NonIdealState
                     icon="error"

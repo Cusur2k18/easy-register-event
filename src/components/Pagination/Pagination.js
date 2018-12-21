@@ -16,8 +16,8 @@ function Pagination (props) {
        <React.Fragment>
         <span className="text-muted mr-2">Pagina {props.currentPage} de {props.totalPages}</span>
         <ButtonGroup>
-          <Button icon="chevron-left" onClick={() => props.onPrev(props.currentPage, props.totalPages, 'prev')}>Atras</Button>
-          <Button rightIcon="chevron-right" onClick={() => props.onNext(props.currentPage, props.totalPages, 'next')}>Siguiente</Button>
+          <Button icon="chevron-left" onClick={() => props.onPrev(props.currentPage, props.totalPages, 'prev')} disabled={props.currentPage === 1}>Atras</Button>
+          <Button rightIcon="chevron-right" onClick={() => props.onNext(props.currentPage, props.totalPages, 'next')} disabled={props.currentPage === props.totalPages}>Siguiente</Button>
         </ButtonGroup>
       </React.Fragment>
       ) : null

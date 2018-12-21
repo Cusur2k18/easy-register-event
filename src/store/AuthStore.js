@@ -1,6 +1,6 @@
 import { Container } from 'unstated'
 import Api from '../utils/api'
-import parseReq from '../utils/parseRequest'
+import parseRes from '../utils/parseResponse'
 import { Alert } from '../components/Alert/Alert'
 import { Intent } from '@blueprintjs/core'
 import LocalStore from './LocalStore'
@@ -23,7 +23,7 @@ export default class AuthStore extends Container {
   login = (studentCode, nip) => {
     this.setLoading(true)
     Api.post('/students/login', JSON.stringify({ studentCode, nip}), { headers: {'Content-Type': 'application/json'} })
-      .then(res => parseReq(res))
+      .then(res => parseRes(res))
       .then(response => {
         if (response.data.error) {
           this.setLoading(false)
@@ -37,7 +37,7 @@ export default class AuthStore extends Container {
         this.setLoading(false)
       })
       .catch(err => {
-        const error = parseReq({ err })
+        const error = parseRes({ err })
         this.setLoading(false)
         Alert.show({ message: error.error, intent: Intent.DANGER, icon: 'warning-sign' })
       })
