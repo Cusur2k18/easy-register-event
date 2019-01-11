@@ -65,7 +65,7 @@ export default class EventDetailContainer extends Component {
   render() {
     const { loadingAction, singleEvent, currentEnrollment } = this.props.actions.events.state;
     const isCurrentUserEnrolled = !!(singleEvent.students && singleEvent.students.find(st => st.id === LocalStore.getUser().id))
-    const isEventAvailableRegister = (moment(new Date().toISOString()).isBefore(singleEvent.start_date) && singleEvent.open_to_enroll)
+    const isEventAvailableRegister = (moment().isBefore(new Date(singleEvent.start_date)) && singleEvent.open_to_enroll)
     const isEventFinish = moment(singleEvent.end_date).isBefore(moment(new Date().toISOString()))
     let action
     

@@ -1,5 +1,4 @@
 export default response => {
-  console.log('res', response)
   switch (response.status) {
     case 200: 
       return {
