@@ -125,22 +125,49 @@ export default class AuthStore extends Container {
 
   doEnrollment = eventId => {
     const userId = LocalStore.getUser().id
-    this.setloadingAction(true)
-    Api.post('/events/enroll', { student_id: userId, event_id: eventId }, { headers: {'Content-Type': 'application/json'} })
-      .then(res => parseRes(res))
-      .then(response => {
-        if (response.error) return new Error('Error on the enroll')
-        LocalStore.setEnrollments([...LocalStore.getEnrollments(), response.data])
-        this.setloadingAction(false)
-        swal({
-          title: 'Listo!',
-          text: 'Tu registro esta hecho! Te esperamos en el evento, \n No olvide imprimir tu boleto y llevarlo o no obtendras asistencia.',
-          type: 'success',
-          onClose: () => {
-            this.getEventById(eventId)
-          }
-        })
-      })
+
+    swal({
+      title: 'Continuar con registro?',
+      text: 'Un vez hecho el registro se te generara un boleto que te servira para marcar asistencia',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si! continuar con mi registro',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.value) {
+        Api.post('/events/enroll', { student_id: userId, event_id: eventId }, { headers: {'Content-Type': 'application/json'} })
+          .then(res => parseRes(res))
+          .then(response => {
+            let data = {}
+            if (response.error) {
+              data = {
+                type: 'error',
+                title: 'Error!',
+                body: 'Hubo un error haciendo el registro'
+              }
+            }
+            LocalStore.setEnrollments([...LocalStore.getEnrollments(), response.data])
+            data = {
+              type: 'success',
+              title: 'Listo',
+              body: 'Tu registro esta hecho! Te esperamos en el evento, \n No olvide imprimir tu boleto y llevarlo o no obtendras asistencia.'
+            }
+            return data
+          })
+          .then(data => {
+            swal({
+              type: data.type,
+              title: data.title,
+              text: data.body,
+              onClose: () => {
+                this.getEventById(eventId)
+              }
+            })
+          })
+      }
+    })
   }
 
   deleteEnrollment = () => {
