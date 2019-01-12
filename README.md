@@ -17,9 +17,9 @@ yarn install
 Then create a `.env` file in the root directory with the following:
 
 ```
-REACT_APP_API_URL=http://localhost:5000/api
+REACT_APP_API_URL=http://localhost:3000/api
 ```
-> This app is ment to work along with the [DAT API](https://github.com/Cusur2k18/diploma-admin-tool)
+> This app is ment to work along with the [DAT API](https://github.com/Cusur2k18/event-contro-base)
 
 
 After that run the server:
