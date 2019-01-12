@@ -88,9 +88,9 @@ export default class AuthStore extends Container {
   }
 
   getEventByUuid = uuid => {
-    const filter = { filter_type: 'by_uuid', value: uuid }
+    const filter = { filter_type: 'by_uuid' }
     this.setSingleLoading(true)
-    Api.get('/events', { params: filter })
+    Api.get(`/events/${uuid}`, { params: filter })
       .then(res => parseRes(res))
       .then(response => {
         if (response.error) return new Error('Error while fetching')
@@ -101,9 +101,9 @@ export default class AuthStore extends Container {
   }
 
   getEventById = id => {
-    const filter = { filter_type: 'by_id', value: id }
+    const filter = { filter_type: 'by_id' }
     this.setSingleLoading(true)
-    Api.get('/events', { params: filter })
+    Api.get(`/events/${id}`, { params: filter })
       .then(res => parseRes(res))
       .then(response => {
         this.setSingleEvent(response.data)
