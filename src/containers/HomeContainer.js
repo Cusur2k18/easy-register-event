@@ -94,13 +94,13 @@ export default class HomeContainer extends Component {
       }
     }
     return {
-      type: 'all'
+      type: 'get_all'
     }
   }
 
   getPriorFilters = () => {
     const { searchCriteria, searchString } = this.state
-    return searchString ? { type: searchCriteria, value: searchString } : { type: 'all' }
+    return searchString ? { type: searchCriteria, value: searchString } : { type: 'get_all' }
   }
 
   render() {

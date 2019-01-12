@@ -74,7 +74,7 @@ export default class AuthStore extends Container {
 
   }
 
-  getFilteredEvents = (params = { type: 'all' }) => {
+  getFilteredEvents = (params = { type: 'get_all' }) => {
     let filter = params.value ? { filter_type: params.type, value: params.value } : { filter_type: params.type }
     filter = params.page ? { ...filter, page: params.page } : filter
     this.setAllLoading(true)
