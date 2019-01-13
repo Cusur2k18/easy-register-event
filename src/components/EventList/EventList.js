@@ -28,7 +28,7 @@ function EventList(props) {
   if (props.events.length) {
     content = props.events.map((singleEvent, i) => {
       return (
-        <React.Fragment key={singleEvent.id}>
+        <React.Fragment key={singleEvent.uuid}>
           <div className="col-12 col-md-4 mt-4">
             <div className="card clickable" onClick={() => {props.onEventDetail(singleEvent.uuid)}}>
               <img className="card-img-top" src={singleEvent.cover ? transformImage(singleEvent.cover, ['w_150', 'h_150']) : defaulttImage} alt="Card" />
