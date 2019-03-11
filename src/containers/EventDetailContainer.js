@@ -35,6 +35,8 @@ export default class EventDetailContainer extends Component {
   
   printQRCode = () => {
     this.setState({ downloadLoading: true })
+    const { singleEvent } = this.props.actions.events.state
+    const currentUser = LocalStore.getUser()
     const input = document.getElementById('ticket')
     html2canvas(input)
       .then((canvas) => {
@@ -42,7 +44,7 @@ export default class EventDetailContainer extends Component {
         const pdf = new jsPDF();
         const pdfImageHeight = this.state.vpwidth > 600 ? 50 : 250;
         pdf.addImage(imgData, 'JPEG', 30, 10, 150, pdfImageHeight);
-        pdf.save("download.pdf");
+        pdf.save(`${singleEvent.name}_${currentUser.studentCode}.pdf`);
         this.setState({ downloadLoading: false })
       })
   }
