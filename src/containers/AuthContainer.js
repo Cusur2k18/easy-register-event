@@ -51,16 +51,16 @@ export default class AuthContainer extends Component {
                 <div className="row">
                   <div className="col-12">
                     <Card elevation={Elevation.TWO}>
-                      <h5 className="text-uppercase">Inicia Sesion</h5>
+                      <h5 className="text-uppercase">Inicia Sesión</h5>
                       <Divider />
                       <form className="p-1 p-md-5" onSubmit={(e) => {
                         e.preventDefault();
                         auth.login(this.state.userCode, this.state.nip)
                       }}>
                         <FormGroup
-                          label="Codigo"
+                          label="Código"
                           labelFor="code-input">
-                            <InputGroup id="code-input" placeholder="Codigo de estudiante" onChange={this.setUserCode} autoComplete="username"  />
+                            <InputGroup id="code-input" placeholder="Código de estudiante" onChange={this.setUserCode} autoComplete="username"  />
                         </FormGroup>
                         <FormGroup
                           label="NIP"

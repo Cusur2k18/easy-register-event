@@ -67,8 +67,8 @@ export default class EventDetailContainer extends Component {
   render() {
     const { loadingAction, singleEvent, currentEnrollment } = this.props.actions.events.state;
     const isCurrentUserEnrolled = !!(singleEvent.students && singleEvent.students.find(st => st.id === LocalStore.getUser().id))
-    const isEventAvailableRegister = (moment().isBefore(new Date(singleEvent.start_date)) && singleEvent.open_to_enroll)
-    const isEventFinish = moment(singleEvent.end_date).isBefore(moment(new Date().toISOString()))
+    const isEventAvailableRegister = (moment().isSameOrBefore(new Date(singleEvent.start_date), 'minute') && singleEvent.open_to_enroll)
+    const isEventFinish = false // TODO: Check that the event is finish based on the date to let the student download the diploma
     let action
     
     if (LocalStore.getUser().id && isEventAvailableRegister) {
@@ -150,13 +150,13 @@ export default class EventDetailContainer extends Component {
                     </div>
                     <div className="col-12 col-md-4 pt-3">
                       <blockquote className="bp3-blockquote">
-                        <span className="font-weight-bold">OTRA INFORMACION:</span>
+                        <span className="font-weight-bold">MÁS INFORMACIÓN:</span>
                       </blockquote>
                       <Callout title="" className="mt-3 mt-md-5">
                         <ul className="list-group list-group-flush">
                           <li className="list-group-item font-weight-bold">Fecha de Inicio:</li>
                           <li className="list-group-item">{moment.utc(singleEvent.start_date).format('dddd DD MMM YYYY hh:mm a')}</li>
-                          <li className="list-group-item font-weight-bold">Fecha de Finalizacion:</li>
+                          <li className="list-group-item font-weight-bold">Fecha de Finalización:</li>
                           <li className="list-group-item">{moment.utc(singleEvent.end_date).format('dddd DD MMM YYYY hh:mm a')}</li>
                           <li className="list-group-item font-weight-bold">Personas registradas al evento:</li>
                           <li className="list-group-item">
@@ -205,8 +205,8 @@ export default class EventDetailContainer extends Component {
                       description={(
                         <React.Fragment>
                             <span className="font-weight-bold text-danger">
-                              Inicia sesion para poder registrarte a un evento <br/><br/><br/>
-                              <Button text="Iniciar Sesion" className="bp3-intent-primary mt-3 mt-md-0" onClick={() => {this.onLoginNeed(singleEvent.uuid)}}/>
+                              Inicia sesión para poder registrarte a un evento <br/><br/><br/>
+                              <Button text="Iniciar Sesión" className="bp3-intent-primary mt-3 mt-md-0" onClick={() => {this.onLoginNeed(singleEvent.uuid)}}/>
                             </span>
                         </React.Fragment>
                       )}/>)}
