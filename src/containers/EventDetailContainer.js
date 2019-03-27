@@ -138,7 +138,7 @@ export default class EventDetailContainer extends Component {
                     </div>
                     <div className="col-12 col-md-8 pt-3 pl-3">
                       <blockquote className="bp3-blockquote">
-                        <span className="font-weight-bold">DATOS DEL EVENTO:</span>
+                        <span className="font-weight-bold">Datos del Evento:</span>
                       </blockquote>
                       <div className="mt-4 mt-md-5">
                         <div dangerouslySetInnerHTML={{__html: singleEvent.description}}></div>
@@ -150,7 +150,7 @@ export default class EventDetailContainer extends Component {
                     </div>
                     <div className="col-12 col-md-4 pt-3">
                       <blockquote className="bp3-blockquote">
-                        <span className="font-weight-bold">MÁS INFORMACIÓN:</span>
+                        <span className="font-weight-bold">Más Información:</span>
                       </blockquote>
                       <Callout title="" className="mt-3 mt-md-5">
                         <ul className="list-group list-group-flush">
@@ -175,7 +175,7 @@ export default class EventDetailContainer extends Component {
                       isCurrentUserEnrolled ? (
                         <React.Fragment>
                           <blockquote className="bp3-blockquote mb-4">
-                            <span className="font-weight-bold">TU BOLETO:</span>
+                            <span className="font-weight-bold">Boleto:</span>
                               <Tooltip content="Descarga tu boleto" position={Position.TOP} hoverCloseDelay={100} className="float-right">
                                 <Button icon="download" className="bp3-intent-primary" loading={this.state.downloadLoading} onClick={this.printQRCode}/>
                               </Tooltip>
