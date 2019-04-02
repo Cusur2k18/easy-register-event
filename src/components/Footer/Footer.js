@@ -8,13 +8,13 @@ function Footer(props) {
         <ul>
           <li>CENTRO UNIVERSITARIO DEL SUR</li>
           <li>Av. Enrique Arreola Silva No. 883, Colonia Centro</li>
-          <li>C.P. 49000, Ciudad Guzman, Jalisco, Mexico</li>
-          <li>Telefono: +52 (341) 575 2222. Fax 01 (341) 5752223</li>
+          <li>C.P. 49000, Ciudad Guzmán, Jalisco, México</li>
+          <li>Teléfono: +52 (341) 575 2222. Fax 01 (341) 5752223</li>
         </ul>
       </div>
       <div className="footer-right">
         <ul>
-          <li>Sitio desarrollador por:</li>
+          <li>Sitio desarrollado por:</li>
           <li>
             <img alt="footer-cta-logo" width="50" height="50" src={LogoCTA} />
           </li>

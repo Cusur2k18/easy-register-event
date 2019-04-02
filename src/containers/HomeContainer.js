@@ -14,6 +14,7 @@ import {
 import { Subscribe } from 'unstated';
 import AuthStore from '../store/AuthStore'
 import EventStore from '../store/EventStore'
+import * as moment from 'moment'
 
 export default class HomeContainer extends Component {
 
@@ -122,7 +123,7 @@ export default class HomeContainer extends Component {
           <React.Fragment>
             <section className="bg-white">
               <div className="container-fluid p-2 px-md-5 py-md-2">
-              <h2>Eventos para hoy <small className="text-muted">{this.now.toLocaleDateString()}</small></h2>
+              <h2>Eventos para hoy <small className="text-muted">{moment(this.now).format('ddd DD/MM/YYYY')}</small></h2>
               <Divider />
                 <div className="row justify-content-around px-2 px-md-5">
                   {events.state.todayEvents.length ? (

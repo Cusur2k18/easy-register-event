@@ -10,7 +10,7 @@ import {
   NavbarGroup,
   NavbarHeading
 } from "@blueprintjs/core"
-import Logo from '../../assets/cusurlogo.jpg'
+import Logo from '../../assets/header.png'
 
 const propTypes = {
   userName: PropTypes.string,
@@ -44,7 +44,7 @@ function NavbarComponent(props) {
       <Navbar>
         <NavbarGroup align={Alignment.LEFT}>
           <div className="clickable" onClick={() => { props.history.push('/') }}>
-            <img src={Logo} alt="Centro Universitario del Sur" width="45" height="45"/>
+            <img src={Logo} alt="Centro Universitario del Sur" width="200" height="50"/>
           </div>
         </NavbarGroup>
         <NavbarGroup align={Alignment.RIGHT}>

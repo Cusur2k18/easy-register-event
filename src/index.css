@@ -21,6 +21,11 @@ body {
   background: #F2F2F2;
 }
 
+#root .bp3-navbar {
+  height: 60px;
+  padding: 5px 15px;
+}
+
 
 .clickable:hover {
   cursor: pointer;
